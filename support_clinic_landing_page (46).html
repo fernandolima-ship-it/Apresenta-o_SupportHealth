@@ -1,0 +1,2401 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Support Clinic | Support Health</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fontes Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent; /* Remove o brilho cinza de toque no iOS */
+        }
+        h1, h2, h3, .font-heading { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        /* Animações e Transições Premium */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Efeito de Flutuação Contínua para Imagens/Componentes */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Efeito de Inclinação e Elevação 3D ao Hover */
+        .hover-lift-3d {
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            perspective: 1000px;
+        }
+        .hover-lift-3d:hover {
+            transform: translateY(-5px) scale(1.005);
+            box-shadow: 0 30px 60px -12px rgba(2, 82, 253, 0.12);
+        }
+
+        /* Transição Suave de Opacidade para Abas da IA */
+        .tab-content {
+            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Ocultar barra de scroll padrão mantendo a funcionalidade de arrastar com o dedo */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Estilos de Animação do Velocímetro (Gauge) com Âncora de Rotação Absoluta */
+        .gauge-svg-container {
+            position: relative;
+            width: 100%;
+            max-width: 200px;
+            margin: 0 auto;
+        }
+        .gauge-arrow {
+            /* Força a rotação baseada no centro perfeito X=50px, Y=50px do arco SVG */
+            transform-origin: 50px 50px !important;
+            transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* Estilo simulador de página de receita digitável */
+        .prescription-editor {
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        /* Animação de entrada sutil para a legenda */
+        @keyframes tooltipFade {
+            from { opacity: 0; transform: translate(-50%, 4px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+        .animate-tooltip {
+            animation: tooltipFade 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-700 antialiased selection:bg-blue-600 selection:text-white overflow-x-hidden">
+
+    <!-- TOOLTIP DINÂMICO GLOBAL (Previne quebras e problemas com overflow de scroll lateral) -->
+    <div id="custom-blocked-tooltip" class="fixed hidden bg-slate-950/95 border border-slate-800 text-white text-[11px] font-semibold py-2 px-3.5 rounded-xl shadow-2xl z-[9999] pointer-events-none transition-opacity duration-200 flex items-center gap-1.5 leading-none">
+        <span>🔒 Bloqueado, agende demonstração</span>
+    </div>
+
+    <!-- Header -->
+    <header class="border-b border-slate-100 sticky top-0 bg-white/90 backdrop-blur-md z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl font-extrabold text-slate-900 tracking-tight font-heading">Support<span class="text-[#0252fd]">Health</span></span>
+            </div>
+            
+            <!-- Menu de navegação para Desktop (Texto e espaçamento otimizados para evitar quebras) -->
+            <nav class="hidden lg:flex space-x-4 xl:space-x-8 text-xs xl:text-sm font-semibold text-slate-500">
+                <a href="#protocolos" class="hover:text-slate-900 transition">Biblioteca de injetáveis</a>
+                <a href="#suportal-ia" class="hover:text-slate-900 transition">Inteligência Artificial</a>
+                <a href="#prontuario-eletronico" class="hover:text-slate-900 transition">Prontuário Eletrônico</a>
+                <a href="#gestao" class="hover:text-slate-900 transition">Gestão Completa</a>
+                <a href="#planos" class="hover:text-slate-900 transition">Escolha o Plano</a>
+                <a href="#especialista" class="hover:text-slate-900 transition">Fale Conosco</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <a href="https://wa.me/553189196026?text=Olá%20Fernando,%20gostaria%20de%20agendar%20uma%20demonstração%20personalizada%20do%20sistema." target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex bg-[#0252fd] hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-semibold transition-all duration-300 text-sm shadow-lg shadow-blue-600/20 hover:shadow-blue-600/35 hover:-translate-y-0.5 inline-flex items-center gap-2 min-h-[44px]">
+                    <i class="fa-brands fa-whatsapp text-base"></i> Agendar Demonstração
+                </a>
+                
+                <!-- Botão Hamburger para telemóveis -->
+                <button id="menu-btn" class="inline-flex lg:hidden p-3 rounded-xl hover:bg-slate-50 text-slate-700 focus:outline-none min-w-[44px] min-h-[44px] items-center justify-center transition-colors duration-200" aria-label="Abrir Menu">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menu Lateral Deslizante para Telemóveis (Sólido e Rápido) -->
+        <div id="mobile-menu" class="fixed inset-0 bg-slate-900/60 z-50 hidden transition-opacity duration-300 opacity-0">
+            <div class="fixed right-0 top-0 bottom-0 w-4/5 max-w-sm bg-white p-6 shadow-2xl flex flex-col justify-between transform translate-x-full transition-transform duration-300">
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                        <span class="text-xl font-extrabold text-slate-900 font-heading">Support<span class="text-[#0252fd]">Health</span></span>
+                        <button id="close-menu-btn" class="p-2 rounded-lg hover:bg-slate-50 text-slate-500 min-w-[44px] min-h-[44px] flex items-center justify-center">
+                            <i class="fa-solid fa-xmark text-xl"></i>
+                        </button>
+                    </div>
+                    <nav class="flex flex-col space-y-4 text-left">
+                        <a href="#protocolos" class="mobile-nav-link text-base font-semibold text-slate-600 p-2 rounded-xl block">Biblioteca de injetáveis</a>
+                        <a href="#suportal-ia" class="mobile-nav-link text-base font-semibold text-slate-600 p-2 rounded-xl block">Inteligência Artificial</a>
+                        <a href="#prontuario-eletronico" class="mobile-nav-link text-base font-semibold text-slate-600 p-2 rounded-xl block">Prontuário Eletrônico</a>
+                        <a href="#gestao" class="mobile-nav-link text-base font-semibold text-slate-600 p-2 rounded-xl block">Gestão Completa</a>
+                        <a href="#planos" class="mobile-nav-link text-base font-semibold text-slate-600 p-2 rounded-xl block">Escolha o Plano</a>
+                        <a href="#especialista" class="mobile-nav-link text-base font-semibold text-slate-600 p-2 rounded-xl block">Fale Conosco</a>
+                    </nav>
+                </div>
+                <div class="pt-6 border-t border-slate-100">
+                    <a href="https://wa.me/553189196026?text=Olá%20Fernando,%20gostaria%20de%20agendar%20uma%20demonstração%20personalizada%20do%20sistema." target="_blank" class="w-full bg-[#0252fd] text-white px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-2 min-h-[48px]">
+                        <i class="fa-brands fa-whatsapp text-lg"></i> Agendar Demonstração
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative pt-10 sm:pt-20 pb-16 overflow-hidden bg-gradient-to-b from-blue-50/50 to-white">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[400px] bg-blue-600/5 rounded-full blur-[140px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center animate-[reveal_1s_ease-out_forwards]">
+            <div class="inline-flex items-center space-x-2 bg-blue-50 border border-blue-100 text-blue-600 px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider mb-8 max-w-full text-left select-none">
+                <i class="fa-solid fa-sparkles mr-1.5 animate-pulse"></i> Inteligência Artificial + Prontuário Eletrônico
+            </div>
+            
+            <h1 class="text-3xl sm:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight max-w-4xl mx-auto font-heading font-extrabold">
+                Feito para médicos que <span class="text-[#0252fd]">transformam vidas</span>.
+            </h1>
+            
+            <p class="mt-6 text-base sm:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed px-4 font-sans">
+                Organize a sua rotina com o software de gestão e registo clínico eletrónico especializado. Otimize até 40% do seu tempo operacional para focar no que realmente importa: seu paciente.
+            </p>
+
+            <div class="mt-8 px-4 font-sans">
+                <a href="https://wa.me/553189196026?text=Olá%20Fernando,%20gostaria%20de%20agendar%20uma%20demonstração%20personalizada%20do%20sistema." target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto bg-[#0252fd] hover:bg-blue-700 hover:scale-105 active:scale-95 text-white px-8 py-4 rounded-xl font-bold transition-all duration-300 shadow-xl shadow-blue-600/30 text-center inline-flex items-center justify-center min-h-[48px]">
+                    Agende uma demonstração personalizada
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 1️⃣ SEÇÃO: A maior biblioteca de protocolos injetáveis do país -->
+    <section id="protocolos" class="py-12 sm:py-20 bg-white border-t border-slate-100 scroll-mt-20 reveal">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            
+            <!-- Cabeçalho de Secção Reestruturado e Centralizado -->
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-[#0252fd] text-xs font-bold uppercase tracking-widest block font-heading font-heading">A maior biblioteca de protocolos injetáveis do país</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-heading font-heading">Montagem ágil e segura de tratamentos injetáveis.</h2>
+                <p class="text-slate-600 text-sm sm:text-base leading-relaxed font-sans">
+                    Ganhe acesso imediato a uma biblioteca de sugestões de protocolos prontos para personalizar para cada caso clínico. Tudo estruturado detalhadamente com a composição recomendada, insumos necessários e vias de aplicação.
+                </p>
+                
+                <!-- Interactive Badge -->
+                <div class="inline-flex items-center gap-2 bg-blue-50 border border-blue-100 text-[#0252fd] px-4 py-2 rounded-full text-xs font-semibold shadow-sm animate-pulse mt-2">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-[#0252fd]"></span>
+                    </span>
+                    <span class="font-sans font-semibold text-left">Simulador Clínico Ativo: Altere as quantidades ou exclua ativos para ver a precificação calcular-se instantaneamente!</span>
+                </div>
+            </div>
+
+            <!-- SIMULADOR DINÂMICO 100% INTERATIVO (DESIGN CAPACITIVO FLUIDO) -->
+            <div class="bg-slate-100 border border-slate-200 rounded-3xl shadow-2xl p-2 sm:p-5 flex flex-col hover-lift-3d font-sans text-xs relative">
+                
+                <!-- Toggle de Abas Exclusivo para Mobile (Garante a melhor usabilidade sem perdas de visualização) -->
+                <div class="flex lg:hidden bg-slate-200 p-1 rounded-xl mb-4 select-none font-sans font-semibold shrink-0">
+                    <button id="sim-btn-editor" onclick="switchSimulatorMobileTab('editor')" class="flex-1 text-center py-2.5 rounded-lg text-xs bg-white text-slate-800 shadow-sm transition-all duration-200 flex items-center justify-center gap-1.5 min-h-[40px]">
+                        <i class="fa-regular fa-file-lines text-blue-600"></i> Seu Plano
+                    </button>
+                    <button id="sim-btn-library" onclick="switchSimulatorMobileTab('library')" class="flex-1 text-center py-2.5 rounded-lg text-xs text-slate-600 transition-all duration-200 flex items-center justify-center gap-1.5 min-h-[40px]">
+                        <i class="fa-solid fa-list-check text-slate-500"></i> Biblioteca
+                    </button>
+                </div>
+
+                <!-- Toast de Sucesso Simulado -->
+                <div id="sim-toast" class="absolute bottom-5 right-5 bg-emerald-500 text-white px-4 py-3 rounded-xl shadow-lg flex items-center space-x-2.5 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300">
+                    <i class="fa-solid fa-circle-check text-base"></i>
+                    <span class="font-semibold text-xs">✓ Alteração consolidada com sucesso!</span>
+                </div>
+
+                <div class="grid lg:grid-cols-12 gap-5">
+                    
+                    <!-- Painel Esquerdo: Adicionar Plano -->
+                    <div id="sim-panel-left" class="lg:col-span-8 bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 flex flex-col justify-between min-h-[520px]">
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center pb-2">
+                                <h3 class="text-base font-extrabold text-slate-800 font-heading">Adicionar plano</h3>
+                                <i class="fa-solid fa-eye text-slate-400 hover:text-slate-600 cursor-pointer font-sans"></i>
+                            </div>
+
+                            <!-- Banner Informativo -->
+                            <div id="sim-banner" class="bg-[#e0f7fa] border border-[#b2ebf2] rounded-lg p-3 text-[#006064] flex items-start justify-between text-[11px] transition-all duration-300">
+                                <div class="flex gap-2.5 text-left">
+                                    <div class="w-5 h-5 bg-[#00acc1] text-white rounded-full flex items-center justify-center shrink-0 text-xs font-bold font-serif font-heading">i</div>
+                                    <span>Após clicar no botão <strong>"Salvar informações"</strong>, será gerado um orçamento para o plano terapêutico prescrito.</span>
+                                </div>
+                                <button onclick="document.getElementById('sim-banner').style.display='none'" class="text-[#00838f] hover:text-[#006064] shrink-0 ml-2"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+
+                            <!-- Campos de Entrada -->
+                            <div class="grid sm:grid-cols-2 gap-4 text-left font-sans">
+                                <div>
+                                    <label class="block text-[11px] font-semibold text-slate-500 mb-1">Nome</label>
+                                    <input type="text" id="sim-plan-name" value="" placeholder="Digite o nome do plano..." class="w-full border border-slate-200 rounded px-3 py-2 text-xs focus:border-blue-500 focus:outline-none" />
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-semibold text-slate-500 mb-1">Assinar digitalmente</label>
+                                    <select class="w-full border border-slate-200 rounded px-3 py-2 text-xs bg-white text-slate-600 focus:outline-none focus:border-blue-500">
+                                        <option>Selecione um certificado</option>
+                                        <option selected>Selecione um certificado</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Seção de Procedimentos Injetáveis -->
+                            <div class="flex justify-between items-center pt-2 font-sans">
+                                <span class="text-xs font-bold text-slate-700">Procedimentos injetáveis</span>
+                                <button onclick="triggerSimSuccess()" class="bg-[#0252fd] hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-lg flex items-center gap-2 text-xs transition shadow min-h-[40px]">
+                                    <i class="fa-regular fa-file-lines"></i> ADICIONAR <i class="fa-solid fa-chevron-down text-[9px] ml-0.5"></i>
+                                </button>
+                            </div>
+
+                            <!-- Cartão de Detalhes do Protocolo -->
+                            <div class="border border-slate-200 rounded-xl p-4 bg-white space-y-4">
+                                <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                                    <span id="sim-protocol-title" class="font-bold text-slate-500 underline decoration-dashed underline-offset-4 cursor-pointer hover:text-slate-800 font-heading">Aminoacidos + HMB para performance (IM)</span>
+                                    <div class="flex items-center space-x-2 text-slate-400">
+                                        <i class="fa-solid fa-arrows-up-down-left-right text-xs cursor-move"></i>
+                                        <i onclick="clearSimulatorIngredients()" class="fa-solid fa-xmark text-red-500 text-xs cursor-pointer hover:text-red-700"></i>
+                                    </div>
+                                </div>
+
+                                <!-- Lista de Substâncias Ativas -->
+                                <div id="sim-ingredients-list" class="space-y-3 max-h-56 overflow-y-auto font-sans pr-1">
+                                </div>
+
+                                <!-- Inputs e Precificação Inferior -->
+                                <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4 text-slate-600 font-sans">
+                                    <div class="flex flex-wrap items-center gap-3">
+                                        <div class="flex items-center space-x-2">
+                                            <input type="number" id="sim-sessions-input" value="10" min="1" max="100" class="w-12 text-center border-b border-slate-300 font-bold text-slate-800 py-0.5 focus:outline-none focus:border-blue-500" onchange="recalculateSimulatorPrice()" oninput="recalculateSimulatorPrice()" />
+                                            <span class="text-slate-500 font-medium">Sessão(ões)</span>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <input type="number" id="sim-frequency-input" value="2" min="1" max="7" class="w-12 text-center border-b border-slate-300 font-bold text-slate-800 py-0.5 focus:outline-none focus:border-blue-500" onchange="recalculateSimulatorPrice()" oninput="recalculateSimulatorPrice()" />
+                                            <span class="text-slate-500 font-medium">Vez(es)</span>
+                                        </div>
+                                        <div class="flex items-center space-x-1">
+                                            <span class="text-slate-500 font-medium">por semana</span>
+                                            <i class="fa-solid fa-chevron-down text-[8px] text-slate-400 ml-1"></i>
+                                        </div>
+                                    </div>
+                                    <div class="text-right font-sans w-full sm:w-auto mt-2 sm:mt-0">
+                                        <strong id="sim-total-price" class="text-base sm:text-lg font-bold text-slate-900 font-heading">R$ 2.112,30</strong>
+                                    </div>
+                                </div>
+
+                                <!-- Campo de Preparação -->
+                                <div class="pt-3 border-t border-slate-100 text-left font-sans">
+                                    <span class="font-bold text-slate-800 block mb-1">Preparação</span>
+                                    <div class="relative">
+                                        <textarea class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-600 text-[11px] focus:outline-none resize-y h-16 leading-relaxed">Aspira o líquido na seringa e não ultrapassar 5ml por aplicação.
+Aplicação em região sadia do glúteo.</textarea>
+                                        <div class="absolute bottom-2 right-2 flex flex-col text-slate-400 space-y-0.5 pointer-events-none">
+                                            <i class="fa-solid fa-caret-up text-[10px]"></i>
+                                            <i class="fa-solid fa-caret-down text-[10px]"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Painel Direito: Biblioteca & Busca -->
+                    <div id="sim-panel-right" class="hidden lg:flex lg:col-span-4 bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 flex flex-col justify-between font-sans">
+                        <div class="space-y-4 text-left w-full">
+                            <div class="relative font-sans">
+                                <input type="text" id="sim-search-input" placeholder="Buscar" class="w-full border border-slate-200 rounded px-3 py-2 text-xs focus:border-blue-500 focus:outline-none font-sans" oninput="filterSimulatorProtocols()" />
+                            </div>
+
+                            <div class="flex justify-between border-b border-slate-100 text-[11px] font-bold text-slate-400 font-heading">
+                                <button class="border-b-2 border-blue-500 text-blue-600 pb-2 px-1 uppercase tracking-wider">Injetáveis</button>
+                                <button class="pb-2 px-1 uppercase hover:text-slate-600 tracking-wider">Mais <i class="fa-solid fa-chevron-down text-[8px] ml-0.5"></i></button>
+                            </div>
+
+                            <div class="space-y-3 text-[11px] text-slate-600 font-medium font-sans">
+                                <label class="flex items-center space-x-2 cursor-pointer select-none">
+                                    <input type="checkbox" id="sim-filter-models" checked class="rounded border-blue-600 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer" onchange="filterSimulatorProtocols()" />
+                                    <span>Exibir modelos da Support Health</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer select-none">
+                                    <input type="checkbox" id="sim-filter-stock" class="rounded border-blue-600 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer" onchange="filterSimulatorProtocols()" />
+                                    <span>Somente em estoque</span>
+                                </label>
+                            </div>
+
+                            <div id="sim-protocols-list" class="space-y-0.5 border border-slate-100 rounded-xl overflow-hidden max-h-72 overflow-y-auto no-scrollbar font-sans w-full">
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-100 flex justify-between items-center text-slate-800 w-full mt-4 font-sans">
+                            <span class="font-bold text-xs text-slate-600 font-sans">Valor total:</span>
+                            <strong id="sim-right-total" class="font-bold text-xs text-slate-900 font-sans">R$ 2.112,30</strong>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 2️⃣ SEÇÃO: Inteligência Artificial (Support IA) -->
+    <section id="suportal-ia" class="py-12 sm:py-20 bg-[#f8fafc] border-t border-slate-100 reveal scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-16">
+            
+            <div class="grid lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+                
+                <!-- Textos Explicativos da IA -->
+                <div class="lg:col-span-5 space-y-5 lg:sticky lg:top-24 text-center sm:text-left">
+                    <span class="text-[#0252fd] text-xs font-bold uppercase tracking-widest block font-heading">Inteligência Artificial Nativa</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 font-heading leading-tight">
+                        One page, através da sua anamnese a IA poderá auxiliar em todo seu raciocínio clínico
+                    </h2>
+                    <p class="text-sm text-slate-600 leading-relaxed font-semibold font-sans">
+                        Diga adeus às digitações cansativas durante as consultas. Nossa IA analisa e transcreve a anamnese automaticamente, gerando sugestão de receitas, exames e dietas de forma instantânea.
+                    </p>
+                    <p class="text-sm text-slate-500 leading-relaxed font-sans hidden sm:block">
+                        Experimente interagir com as abas de simulação ao lado para ver como os documentos clínicos são gerados pelo sistema com base no relato do paciente.
+                    </p>
+                    <div class="space-y-4 text-left pt-2 font-sans">
+                        <div class="flex items-start gap-3 group">
+                            <div class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300"><i class="fa-solid fa-microphone"></i></div>
+                            <div>
+                                <strong class="text-slate-900 block text-sm">Captação de Consultas por Áudio</strong>
+                                <span class="text-slate-500 leading-relaxed text-xs">O sistema ouve a interação, organiza as queixas do paciente e preenche os campos correspondentes na anamnese.</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 group">
+                            <div class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300"><i class="fa-solid fa-apple-whole"></i></div>
+                            <div>
+                                <strong class="text-slate-900 block text-sm">Criação Instantânea de Dietas</strong>
+                                <span class="text-slate-500 leading-relaxed text-xs">Preencha metas de calorias e preferências e deixe a IA programar a dieta detalhada por refeição em segundos.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Painel Replicando as Abas Interativas -->
+                <div class="lg:col-span-7 bg-[#090f1d] border border-slate-800 rounded-2xl shadow-2xl overflow-hidden text-xs space-y-4 p-3 sm:p-4 text-slate-300 font-sans">
+                    <div class="border-b border-slate-800/80 pb-3 flex items-center justify-between font-heading">
+                        <div class="flex items-center space-x-2 text-blue-400 font-bold">
+                            <i class="fa-solid fa-sparkles animate-pulse"></i>
+                            <span class="text-white text-sm">Support IA Workspace</span>
+                        </div>
+                        <i class="fa-solid fa-circle text-emerald-500 text-[10px]"></i>
+                    </div>
+
+                    <div class="p-3 bg-slate-900/40 border border-slate-800/80 rounded-xl flex flex-wrap gap-4 sm:gap-6 text-[11px]">
+                        <div><span class="text-slate-500 block uppercase text-[9px] font-bold">Registo Clínico</span><strong class="text-white">Fernando Lino Da Silva Lima</strong></div>
+                        <div class="flex gap-4">
+                            <div><span class="text-slate-500 block uppercase text-[9px] font-bold">Idade</span><strong class="text-white">28 anos</strong></div>
+                            <div><span class="text-slate-500 block uppercase text-[9px] font-bold">Nascimento</span><strong class="text-white">18/06/1998</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="flex border-b border-slate-800 bg-slate-900/20 overflow-x-auto text-[11px] font-medium text-slate-400 gap-1 no-scrollbar scroll-smooth">
+                        <button onclick="switchTab('anamnese')" id="tab-anamnese" class="px-4 py-3 border-b-2 border-blue-500 text-white bg-slate-900/60 font-semibold whitespace-nowrap transition-all duration-300 min-h-[44px]">ANAMNESE</button>
+                        <button onclick="switchTab('prescricao')" id="tab-prescricao" class="px-4 py-3 border-b-2 border-transparent hover:text-white whitespace-nowrap transition-all duration-300 min-h-[44px]">PRESCRIÇÃO</button>
+                        <button onclick="switchTab('pedidoexames')" id="tab-pedidoexames" class="px-4 py-3 border-b-2 border-transparent hover:text-white whitespace-nowrap transition-all min-h-[44px]">PEDIDO DE EXAMES</button>
+                        <button onclick="switchTab('dieta')" id="tab-dieta" class="px-4 py-3 border-b-2 border-transparent hover:text-white whitespace-nowrap transition-all font-bold text-emerald-400 min-h-[44px]">DIETA</button>
+                    </div>
+
+                    <div class="p-4 bg-slate-900/30 border border-slate-800/80 rounded-xl min-h-[220px] relative overflow-hidden text-left font-sans">
+                        <div id="content-anamnese" class="tab-content transition-all duration-300 space-y-4">
+                            <div>
+                                <strong class="text-white block font-heading text-[12px] mb-1 font-heading">Queixa Principal (QP):</strong>
+                                <p class="text-slate-400 text-[11px] leading-relaxed">Paciente relata dor de cabeça persistente durante todo o dia, acompanhada de náusea, sem alívio com medidas habituais.</p>
+                            </div>
+                            <div>
+                                <strong class="text-white block font-heading text-[12px] mb-1 font-heading">História da Doença Atual (HDA):</strong>
+                                <p class="text-slate-400 text-[11px] leading-relaxed">A cefaleia iniciou-se no mesmo dia da consulta, com intensidade significativa e sem resposta a intenções caseiras. A dor é contínua e impacta negativamente o bem-estar.</p>
+                            </div>
+                            <div>
+                                <strong class="text-white block font-heading text-[12px] mb-1 font-heading">História Social (HS):</strong>
+                                <p class="text-slate-400 text-[11px] leading-relaxed">Refere sedentarismo, ausência de prática de exercícios físicos e padrão alimentar inadequado, com consumo frequente de fast-food (McDonald's, Burger King).</p>
+                            </div>
+                        </div>
+
+                        <div id="content-prescricao" class="tab-content hidden transition-all duration-300 space-y-3">
+                            <strong class="text-white block font-heading text-[12px] mb-1 font-heading">Prescrição Prescrita:</strong>
+                            <ul class="space-y-2 text-[11px] text-slate-300 leading-relaxed font-sans">
+                                <li class="flex items-start gap-2">
+                                    <i class="fa-solid fa-circle text-[6px] mt-1.5 text-blue-400 shrink-0"></i>
+                                    <span><strong>Paracetamol 500mg</strong> – 1 comprimido a cada 6 horas se necessário para dor de cabeça.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fa-solid fa-circle text-[6px] mt-1.5 text-blue-400 shrink-0"></i>
+                                    <span><strong>Dimenidrinato 50mg</strong> – 1 comprimido a cada 8 horas se necessário para náusea.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div id="content-pedidoexames" class="tab-content hidden transition-all duration-300 space-y-4">
+                            <div>
+                                <strong class="text-white block font-heading text-[12px] mb-2 font-heading font-sans">Exames Recomendados:</strong>
+                                <ul class="space-y-1.5 text-[11px] text-slate-300 font-sans">
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-chevron-right text-blue-400 text-[8px]"></i> Hemograma completo</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-chevron-right text-blue-400 text-[8px]"></i> Glicemia de jejum</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-chevron-right text-blue-400 text-[8px]"></i> Perfil lipídico (colesterol total, HDL, LDL, triglicerídeos)</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-chevron-right text-blue-400 text-[8px]"></i> TSH e T4 Livre</li>
+                                </ul>
+                            </div>
+                            <div class="pt-3 border-t border-slate-800 text-[10px] text-slate-400 leading-relaxed font-sans">
+                                <strong>Orientações:</strong> Jejum de 8 horas obrigatório. <br>
+                                <strong>Justificativa:</strong> Investigação de cefaleia persistente, náusea, dificuldade para emagrecer e histórico de diabetes. Urgência: rotina.
+                            </div>
+                        </div>
+
+                        <div id="content-dieta" class="tab-content hidden space-y-4 font-sans">
+                            <div>
+                                <strong class="text-white block font-heading text-[13px] mb-1">Dieta de 2.300 kcal — Planejada por IA</strong>
+                                <span class="text-xs text-emerald-400 font-semibold block mb-3">Refeições Estruturadas:</span>
+                            </div>
+                            <div class="space-y-4 text-[11px] leading-relaxed max-h-80 overflow-y-auto no-scrollbar font-sans font-sans">
+                                <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-800">
+                                    <strong class="text-white block mb-1">Refeição 1 - 07:00</strong>
+                                    <ul class="space-y-1 text-slate-400 font-sans">
+                                        <li>• 3 ovos de galinha cozidos (210 kcal)</li>
+                                        <li>• 40g queijo minas frescal (106 kcal)</li>
+                                        <li>• 100g abacate (96 kcal)</li>
+                                        <li>• 80g fígado bovino grelhado (B12 e ferro) (180 kcal)</li>
+                                    </ul>
+                                    <span class="text-[10px] text-emerald-400 font-bold block mt-2">Total calórico da opção: 594 kcal</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-800 text-slate-500 text-[10px] font-sans">
+                        <span>Ações Rápidas de Documentos</span>
+                        <span class="bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full font-bold">Módulo Ativo</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🧪 SEÇÃO SUPPORT LAB INTERATIVO (PIXEL-PERFECT REAL BASEADO EM LAB.PNG) -->
+            <div id="suportelab" class="bg-white border border-slate-200 rounded-3xl shadow-2xl overflow-hidden flex flex-col hover-lift-3d animate-float">
+                <div class="p-6 border-b border-slate-200 bg-white text-left font-sans">
+                    <h3 class="text-xl font-bold text-slate-950 font-heading mb-2">Support Lab</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed font-sans">
+                        Revolução na interpretação de exames laboratoriais, desenvolvido para levar agilidade ao atendimento clínico, o Support Lab interpreta exames laboratoriais em segundos utilizando a Inteligência Artificial.
+                    </p>
+                </div>
+
+                <div class="bg-slate-100 border-b border-slate-200 px-4 py-3 flex items-center justify-between shrink-0 font-sans">
+                    <div class="flex space-x-1.5 font-sans">
+                        <span class="w-3 h-3 rounded-full bg-red-400 block"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-400 block"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-400 block"></span>
+                    </div>
+                    <div class="bg-white border border-slate-200 rounded-md px-3 py-1 text-[10px] text-slate-400 font-mono w-1/3 text-center truncate">
+                        supportclinic.com.br/support-lab/analisar
+                    </div>
+                    <div class="w-8"></div>
+                </div>
+
+                <!-- ÁREA DE INTERAÇÃO DO LAB -->
+                <div class="relative bg-slate-50 p-2 sm:p-6 min-h-[500px] flex items-center justify-center font-sans">
+                    
+                    <!-- 1. TELA DE UPLOAD (Inicial) -->
+                    <div id="lab-state-upload" class="max-w-md w-full bg-white border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center space-y-4 hover:border-blue-400 transition-colors duration-300">
+                        <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-2xl mx-auto shadow-inner animate-pulse">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <h4 class="font-extrabold text-slate-800 text-sm font-heading">Anexe os Exames do Paciente</h4>
+                            <p class="text-slate-400 text-xs">Arraste e solte o arquivo PDF ou imagem do exame clínico diretamente aqui.</p>
+                        </div>
+                        <div class="pt-2">
+                            <button onclick="triggerLabAnalysis()" class="bg-[#0252fd] hover:bg-blue-700 active:scale-95 text-white font-bold px-6 py-3 rounded-xl text-xs inline-flex items-center gap-2 transition-all shadow-md shadow-blue-500/10 touch-target font-heading">
+                                <i class="fa-solid fa-wand-magic-sparkles animate-pulse"></i> Analisar Exame de Exemplo (Laudo IA)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 2. TELA DE CARREGAMENTO -->
+                    <div id="lab-state-loading" class="hidden flex flex-col items-center justify-center text-center space-y-4">
+                        <div class="relative w-16 h-16">
+                            <div class="absolute inset-0 rounded-full border-4 border-slate-100 border-t-[#0252fd] animate-spin"></div>
+                        </div>
+                        <h4 class="font-extrabold text-slate-800 text-sm font-heading animate-pulse">Support IA Processando...</h4>
+                        <p id="lab-loading-text" class="text-slate-400 text-xs font-mono h-4">Mapeando PDF com OCR Inteligente...</p>
+                    </div>
+
+                    <!-- 3. TELA DE DASHBOARD REAL -->
+                    <div id="lab-state-results" class="hidden w-full bg-slate-50 rounded-2xl p-1.5 sm:p-5 text-left space-y-5 text-slate-700">
+                        
+                        <div class="grid lg:grid-cols-12 gap-4 lg:gap-5 items-start font-sans">
+                            
+                            <!-- Coluna Esquerda: Biomarcadores -->
+                            <div class="lg:col-span-4 bg-white border border-slate-200 rounded-xl p-4 space-y-2.5 shadow-sm max-h-[580px] overflow-y-auto no-scrollbar font-sans w-full">
+                                <div class="text-center border-b border-slate-100 pb-3 mb-2 font-heading">
+                                    <strong class="text-slate-700 text-sm block">Biomarcadores</strong>
+                                </div>
+                                
+                                <div class="space-y-2 text-xs">
+                                    <div class="flex justify-between border-b border-slate-100 pb-1.5 text-red-500 font-medium font-sans"><span>25 Hidroxi vitamina D:</span><strong>15.70 ng/mL</strong></div>
+                                    <div class="flex justify-between border-b border-slate-100 pb-1.5 text-red-500 font-medium font-sans"><span>Testosterona Total:</span><strong>504 ng/dL</strong></div>
+                                    <div class="flex justify-between border-b border-slate-100 pb-1.5 text-red-500 font-medium font-sans"><span>Testosterona Livre Calculada:</span><strong>14.32 ng/dL</strong></div>
+                                    <div class="flex justify-between border-b border-slate-100 pb-1.5 text-red-500 font-medium font-sans"><span>Plaquetas:</span><strong>237 mil/mm3</strong></div>
+                                    <div class="flex justify-between border-b border-slate-100 pb-1.5 text-red-500 font-medium font-sans"><span>Colesterol HDL:</span><strong>39 mg/dL</strong></div>
+                                    <div class="flex justify-between border-b border-slate-100 pb-1.5 text-slate-600 font-sans"><span>Linfócitos Típicos:</span><strong>2191 /mm3</strong></div>
+                                    <div class="flex justify-between border-b border-slate-100 pb-1.5 text-slate-700 font-sans"><span>Segmentados:</span><strong>3463 /mm3</strong></div>
+                                    <div class="flex justify-between border-b border-slate-100 pb-1.5 text-slate-700 font-sans"><span>Leucócitos:</span><strong>6660 /mm3</strong></div>
+                                    <div class="flex justify-between border-b border-slate-100 pb-1.5 text-slate-700 font-sans"><span>RDW:</span><strong>12.7 %</strong></div>
+                                    <div class="flex justify-between border-b border-slate-100 pb-1.5 text-slate-700 font-sans"><span>C.H.C.M.:</span><strong>34.6 %</strong></div>
+                                    <div class="flex justify-between border-b border-slate-100 pb-1.5 text-slate-700 font-sans"><span>Colesterol não-HDL:</span><strong>132 mg/dL</strong></div>
+                                    <div class="flex justify-between border-b border-slate-100 pb-1.5 text-slate-700 font-sans"><span>Basófilos:</span><strong>33 /mm3</strong></div>
+                                    <div class="flex justify-between border-b border-slate-100 pb-1.5 text-slate-700 font-sans"><span>Colesterol Total:</span><strong>171 mg/dL</strong></div>
+                                    <div class="flex justify-between border-b border-slate-100 pb-1.5 text-slate-700 font-sans"><span>Hemoglobina:</span><strong>15.6 µg/dL</strong></div>
+                                    <div class="flex justify-between border-b border-slate-100 pb-1.5 text-slate-700 font-sans"><span>Hemácias:</span><strong>5.08 milhões/mm3</strong></div>
+                                    <div class="flex justify-between border-b border-slate-100 pb-1.5 text-slate-700 font-sans"><span>Colesterol LDL:</span><strong>112 mg/dL</strong></div>
+                                    <div class="flex justify-between text-slate-700 font-semibold border-b border-slate-100 pb-1.5 font-sans"><span>SHBG:</span><strong>17.6 nmol/L</strong></div>
+                                </div>
+                            </div>
+
+                            <!-- Coluna Direita: Laudos e Gráficos -->
+                            <div class="lg:col-span-8 space-y-4 w-full">
+                                <div class="bg-white border border-slate-200 rounded-2xl p-5 space-y-4 shadow-sm text-left font-sans">
+                                    <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                                        <span class="text-xs font-extrabold text-slate-400 uppercase tracking-wider font-heading">Laudo Geral de Biomarcadores</span>
+                                        <button onclick="resetLabSimulator()" class="text-slate-400 hover:text-red-500 transition-colors p-2 -mr-2 flex items-center gap-1 font-bold text-[10px] touch-target" title="Analisar outro exame">
+                                            <i class="fa-solid fa-rotate-left text-xs"></i> REINICIAR
+                                        </button>
+                                    </div>
+
+                                    <div class="space-y-1">
+                                        <h4 class="text-slate-800 font-extrabold text-xs sm:text-sm font-heading">Análise Geral:</h4>
+                                        <p class="text-slate-600 leading-relaxed text-[11px] sm:text-xs">O paciente apresenta exames laboratoriais em sua maioria dentro dos padrões de normalidade, com destaque para deficiência de vitamina D e alterações discretas no perfil lipídico e hormonal.</p>
+                                    </div>
+
+                                    <div class="space-y-1">
+                                        <h4 class="text-slate-800 font-extrabold text-xs sm:text-sm font-heading font-sans">Biomarcadores Anormais:</h4>
+                                        <ul class="list-disc pl-4 text-slate-600 leading-relaxed text-[11px] sm:text-xs font-sans">
+                                            <li><strong>25-Hidroxivitamina D:</strong> 15.70 ng/mL (deficiente, valor de referência &ge; 20.00 ng/mL)</li>
+                                            <li><strong>Colesterol HDL:</strong> 39.00 mg/dL (abaixo do valor de referência &ge; 40.00 mg/dL)</li>
+                                            <li><strong>Testosterona Livre Calculada:</strong> 14.32 ng/dL (próxima do limite superior, valor de referência até 14.80 ng/dL)</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="space-y-1">
+                                        <h4 class="text-slate-800 font-extrabold text-xs sm:text-sm font-heading font-sans">Conduta Recomendada:</h4>
+                                        <ul class="list-disc pl-4 text-slate-600 leading-relaxed text-[11px] sm:text-xs font-sans">
+                                            <li><strong>Reposição de vitamina D:</strong> Recomenda-se suplementação e exposição solar orientada para corrigir a deficiência.</li>
+                                            <li><strong>Reavaliação do perfil lipídico:</strong> O HDL baixo sugere necessidade de mudanças no estilo de vida, como atividade física e dieta balanceada.</li>
+                                            <li><strong>Acompanhamento hormonal:</strong> Testosterona livre próxima do limite superior deve ser monitorada, correlacionando com sintomas clínicos.</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="space-y-1 font-sans">
+                                        <h4 class="text-slate-800 font-extrabold text-xs sm:text-sm font-heading font-sans font-sans">Conclusão:</h4>
+                                        <p class="text-slate-600 leading-relaxed text-[11px] sm:text-xs">O paciente apresenta bom estado geral, com deficiência de vitamina D e HDL discretamente reduzido. Recomenda-se acompanhamento clínico, intervenção para vitamina D e promoção de hábitos saudáveis para otimização do perfil lipídico.</p>
+                                    </div>
+                                </div>
+
+                                <div class="grid sm:grid-cols-2 gap-4 font-sans text-xs text-slate-700">
+                                    
+                                    <!-- GAUGES 1: VITAMINA D -->
+                                    <div class="border border-slate-200 bg-white rounded-2xl p-4 flex flex-col justify-between shadow-sm relative overflow-hidden min-h-[220px]">
+                                        <div class="flex justify-between items-center pb-2 border-b border-slate-100 font-heading">
+                                            <span class="font-bold text-slate-800 flex items-center gap-1.5">25 Hidroxi vitamina D <span class="text-red-500 font-black animate-pulse">⚠️</span></span>
+                                            <i class="fa-regular fa-bookmark text-slate-400"></i>
+                                        </div>
+
+                                        <div class="gauge-svg-container my-1">
+                                            <svg viewBox="0 0 100 60" class="w-full h-auto">
+                                                <defs>
+                                                    <linearGradient id="gauge-grad-real-new" x1="0%" y1="100%" x2="100%" y2="100%">
+                                                        <stop offset="0%" stop-color="#f97316" />
+                                                        <stop offset="50%" stop-color="#eab308" />
+                                                        <stop offset="100%" stop-color="#22c55e" />
+                                                    </linearGradient>
+                                                </defs>
+                                                <path d="M 15 50 A 35 35 0 0 1 85 50" fill="none" stroke="#f1f5f9" stroke-width="8" stroke-linecap="round" />
+                                                <path d="M 15 50 A 35 35 0 0 1 85 50" fill="none" stroke="url(#gauge-grad-real-new)" stroke-width="8" stroke-linecap="round" />
+                                                <text x="25" y="32" fill="#94a3b8" font-size="4" font-weight="bold" text-anchor="middle">30</text>
+                                                <text x="75" y="32" fill="#94a3b8" font-size="4" font-weight="bold" text-anchor="middle">45</text>
+                                                <g class="gauge-arrow" style="transform-origin: 50px 50px; transform: rotate(-75deg);">
+                                                    <polygon points="48.8,50 51.2,50 50,11" fill="#334155" />
+                                                    <circle cx="50" cy="50" r="3.5" fill="#334155" />
+                                                </g>
+                                            </svg>
+                                            <div class="absolute inset-0 flex flex-col items-center justify-end pb-3">
+                                                <strong class="text-2xl font-black text-slate-800 leading-none">15.70</strong>
+                                                <span class="text-[9px] text-slate-400 font-mono mt-0.5">ng/mL</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex justify-between items-end border-t border-slate-50 pt-2 text-[9px] text-slate-400">
+                                            <div class="text-left font-mono">
+                                                <span class="block text-[8px] text-slate-400">Valor Mín.</span>
+                                                <strong class="text-slate-800 font-bold">15.7</strong>
+                                            </div>
+                                            <div class="text-center">
+                                                <span class="block text-[8px] text-slate-400">Evolução</span>
+                                                <strong class="text-slate-800 font-bold">↓ 31,21%</strong>
+                                                <span class="block text-[8px] text-slate-400 mt-1">Referência</span>
+                                                <strong class="text-slate-800 font-bold">40 ~ 60</strong>
+                                            </div>
+                                            <div class="text-right font-mono">
+                                                <span class="block text-[8px] text-slate-400">Valor Máx.</span>
+                                                <strong class="text-slate-800 font-bold">60</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- GAUGES 2: TESTOSTERONA -->
+                                    <div class="border border-slate-200 bg-white rounded-2xl p-4 flex flex-col justify-between shadow-sm relative overflow-hidden min-h-[220px]">
+                                        <div class="flex justify-between items-center pb-2 border-b border-slate-100 font-heading">
+                                            <span class="font-bold text-slate-800 flex items-center gap-1.5 font-heading">Testosterona Total <span class="text-red-500 font-black animate-pulse">⚠️</span></span>
+                                            <i class="fa-regular fa-bookmark text-slate-400"></i>
+                                        </div>
+
+                                        <div class="gauge-svg-container my-1 font-sans">
+                                            <svg viewBox="0 0 100 60" class="w-full h-auto">
+                                                <path d="M 15 50 A 35 35 0 0 1 85 50" fill="none" stroke="#f1f5f9" stroke-width="8" stroke-linecap="round" />
+                                                <path d="M 15 50 A 35 35 0 0 1 85 50" fill="none" stroke="url(#gauge-grad-real-new)" stroke-width="8" stroke-linecap="round" />
+                                                <text x="25" y="32" fill="#94a3b8" font-size="4" font-weight="bold" text-anchor="middle">181</text>
+                                                <text x="75" y="32" fill="#94a3b8" font-size="4" font-weight="bold" text-anchor="middle">343</text>
+                                                <g class="gauge-arrow" style="transform-origin: 50px 50px; transform: rotate(25deg);">
+                                                    <polygon points="48.8,50 51.2,50 50,11" fill="#334155" />
+                                                    <circle cx="50" cy="50" r="3.5" fill="#334155" />
+                                                </g>
+                                            </svg>
+                                            <div class="absolute inset-0 flex flex-col items-center justify-end pb-3">
+                                                <strong class="text-2xl font-black text-slate-800 leading-none">504.00</strong>
+                                                <span class="text-[9px] text-slate-400 font-mono mt-0.5">ng/dL</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex justify-between items-end border-t border-slate-100 pt-2 text-[9px] text-slate-400">
+                                            <div class="text-left font-mono">
+                                                <span class="block text-[8px] text-slate-400">Mínimo</span>
+                                                <strong class="text-slate-800 font-bold">20</strong>
+                                            </div>
+                                            <div class="text-center font-sans">
+                                                <span class="block text-[8px] text-slate-400">Referência</span>
+                                                <strong class="text-slate-800 font-bold font-sans">20 ~ 60</strong>
+                                            </div>
+                                            <div class="text-right font-mono">
+                                                <span class="block text-[8px] text-slate-400">Máximo</span>
+                                                <strong class="text-slate-800 font-bold">504</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 3️⃣ SEÇÃO: Prontuário Eletrônico Completo -->
+    <section id="prontuario-eletronico" class="py-12 sm:py-20 bg-slate-50 border-t border-slate-100 reveal scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-[#0252fd] text-xs font-bold uppercase tracking-widest block font-heading">Atendimento Clínico Multidisciplinar</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-heading">Prontuário Eletrônico Completo</h2>
+                <p class="text-slate-600 text-sm sm:text-base leading-relaxed font-sans">
+                    Opere o sistema clínico real de forma intuitiva e integrada. Acesse o histórico clínico evolutivo detalhado, prescreva formulações de manipulação personalizadas e organize solicitações de exames laboratoriais.
+                </p>
+            </div>
+
+            <!-- CONTAINER GERAL DO PRONTUÁRIO (COM TOTAL SEGURANÇA E LARGURA DINÂMICA) -->
+            <div class="w-full max-w-full bg-white border border-slate-200 rounded-3xl shadow-2xl overflow-hidden flex flex-col font-sans text-xs">
+                
+                <!-- 1. Cabeçalho de Navegador -->
+                <div class="bg-slate-100 px-4 py-3 flex items-center justify-between border-b border-slate-200 select-none shrink-0 font-sans">
+                    <div class="flex space-x-1.5">
+                        <span class="w-3 h-3 rounded-full bg-red-400 block"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-400 block"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-400 block"></span>
+                    </div>
+                    <div class="bg-white border border-slate-200 rounded-md px-3 py-1 text-[10px] text-slate-400 font-mono w-1/2 text-center truncate">
+                        supportclinic.com.br/prontuario/789602-fernando-lino
+                    </div>
+                    <div class="flex items-center space-x-2 text-slate-400 font-sans">
+                        <i class="fa-solid fa-lock text-emerald-500 text-[10px]"></i>
+                        <span class="text-[10px] font-bold text-slate-500">Conexão Criptografada SSL</span>
+                    </div>
+                </div>
+
+                <!-- 2. CARTÃO AZUL DO PACIENTE (Fiel à imagem Prontuario.jpg) -->
+                <div class="bg-[#0252fd] text-white p-4 sm:p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative shrink-0">
+                    <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+                        <!-- Avatar -->
+                        <div class="relative">
+                            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-4 border-white/20 bg-slate-200 shadow-md">
+                                <img src="IMG_70162.jpg" alt="Fernando Lino" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'">
+                            </div>
+                            <span class="absolute bottom-0 right-0 w-6 h-6 bg-green-500 border-2 border-white rounded-full flex items-center justify-center font-bold text-[10px] text-white select-none">A</span>
+                        </div>
+                        
+                        <!-- Dados do Paciente -->
+                        <div class="text-center sm:text-left space-y-1">
+                            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                                <strong class="text-base sm:text-lg font-heading tracking-wide">789602 - Fernando Lino Da Silva Lima</strong>
+                                <i class="fa-solid fa-gear text-xs text-white/80 cursor-pointer hover:rotate-45 transition-transform" title="Configurações do Paciente"></i>
+                            </div>
+                            <p class="text-[11px] text-blue-100 font-medium">28 anos 2 semanas 5 dias</p>
+                            <div class="text-[11px] text-blue-100/90 space-y-0.5 font-sans">
+                                <p><strong>CPF:</strong> 135.491.076-17 • <strong>Mãe:</strong> Eliane</p>
+                                <p><strong>E-mail:</strong> fernandolino4@live.com • <strong>Contato:</strong> (31) 98587-3026</p>
+                                <p><strong>Convênio:</strong> - • <strong>Contato de emergência:</strong> -</p>
+                            </div>
+                            
+                            <!-- Badges / Etiquetas Reais -->
+                            <div class="flex flex-wrap gap-1.5 pt-2 justify-center sm:justify-start font-sans">
+                                <span class="bg-blue-800/60 hover:bg-red-500/80 transition-colors px-2 py-1 rounded text-[10px] font-bold flex items-center gap-1 cursor-pointer" onclick="this.remove()">10/01/2006 Bypass sem <i class="fa-solid fa-xmark text-[8px]"></i></span>
+                                <span class="bg-blue-800/60 hover:bg-red-500/80 transition-colors px-2 py-1 rounded text-[10px] font-bold flex items-center gap-1 cursor-pointer" onclick="this.remove()">Emagrecimento <i class="fa-solid fa-xmark text-[8px]"></i></span>
+                                <span class="bg-blue-800/60 hover:bg-red-500/80 transition-colors px-2 py-1 rounded text-[10px] font-bold flex items-center gap-1 cursor-pointer" onclick="this.remove()">Risco de queda <i class="fa-solid fa-xmark text-[8px]"></i></span>
+                                <button class="bg-blue-500/40 hover:bg-blue-500/60 border border-white/20 px-2 py-1 rounded text-[10px] font-bold transition">Adicionar etiqueta</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ações Rápidas Direitas do Ecrã do Paciente -->
+                    <div class="flex md:flex-col gap-2 w-full md:w-auto shrink-0 border-t border-white/10 md:border-none pt-4 md:pt-0 font-sans">
+                        <button class="flex-1 md:flex-initial bg-white/10 hover:bg-white/25 active:scale-95 text-white py-2 px-3 sm:px-4 rounded-xl flex items-center justify-center gap-2 transition-all font-semibold touch-target text-[11px]">
+                            <i class="fa-solid fa-file-medical text-xs"></i> Nova Evolução
+                        </button>
+                        <button class="flex-1 md:flex-initial bg-white/10 hover:bg-white/25 active:scale-95 text-white py-2 px-3 sm:px-4 rounded-xl flex items-center justify-center gap-2 transition-all font-semibold touch-target text-[11px]">
+                            <i class="fa-solid fa-history text-xs"></i> Solicitações
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. ÁREA OPERACIONAL: MENU LATERAL COMPLETO E WORKSPACE -->
+                <div class="grid lg:grid-cols-12 text-slate-800 bg-white">
+                    
+                    <!-- MENU LATERAL COMPLETO DO PRONTUÁRIO (Fiel à imagem de referência image_944645.png) -->
+                    <!-- Em mobile, transformamos num menu de abas nativo ultra-polido que não deforma nem estica na horizontal -->
+                    <div class="lg:col-span-3 border-r border-slate-200 bg-white flex lg:flex-col overflow-x-auto lg:overflow-x-visible lg:overflow-y-auto no-scrollbar shrink-0 select-none text-left max-h-[620px] p-2 lg:p-0">
+                        
+                        <!-- Topo do Menu (Desktop apenas) -->
+                        <div class="hidden lg:flex justify-between items-center px-4 py-3 border-b border-slate-100 bg-slate-50/50 font-heading">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">MENU</span>
+                            <i class="fa-solid fa-bars text-slate-400 text-xs"></i>
+                        </div>
+                        
+                        <!-- Campo de Pesquisa do Paciente (Desktop apenas) -->
+                        <div class="hidden lg:block p-3 border-b border-slate-100 bg-white">
+                            <div class="relative">
+                                <input type="text" placeholder="Pesquisar paciente" class="w-full border border-slate-200 rounded px-2.5 py-1.5 text-[11px] text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500 font-sans" />
+                            </div>
+                        </div>
+
+                        <!-- Lista de Botões Mobile-Friendly que se adapta perfeitamente -->
+                        <div class="flex lg:flex-col w-full py-1.5 space-x-2 lg:space-x-0 lg:space-y-0.5 min-w-max lg:min-w-0 font-sans items-center lg:items-stretch">
+                            
+                            <!-- 1. Histórico do paciente (HABILITADO) -->
+                            <button id="p-menu-historico" onclick="switchProntuarioView('historico')" class="text-left px-4 py-3 text-xs font-bold bg-[#f1f5f9] text-slate-900 border-l-[3px] border-[#0252fd] transition-all flex items-center gap-3 rounded-lg lg:rounded-none shrink-0 min-h-[44px]">
+                                <i class="fa-solid fa-clock-rotate-left text-sm text-slate-500 w-4 text-center"></i>
+                                <span>Histórico do paciente</span>
+                            </button>
+
+                            <!-- 5. Receitas (HABILITADO) -->
+                            <button id="p-menu-receita" onclick="switchProntuarioView('receita')" class="text-left px-4 py-3 text-xs font-medium text-slate-500 transition-all flex items-center gap-3 border-l-[3px] border-transparent hover:bg-slate-50 rounded-lg lg:rounded-none shrink-0 min-h-[44px]">
+                                <i class="fa-regular fa-file-prescription text-sm text-slate-400 w-4 text-center"></i>
+                                <span>Receitas</span>
+                            </button>
+
+                            <!-- 10. Exames (HABILITADO) -->
+                            <button id="p-menu-exames" onclick="switchProntuarioView('exames')" class="text-left px-4 py-3 text-xs font-medium text-slate-500 transition-all flex items-center gap-3 border-l-[3px] border-transparent hover:bg-slate-50 rounded-lg lg:rounded-none shrink-0 min-h-[44px]">
+                                <i class="fa-solid fa-stethoscope text-sm text-slate-400 w-4 text-center"></i>
+                                <span>Exames</span>
+                            </button>
+
+                            <!-- Elemento de Divisão Mobile -->
+                            <div class="h-6 w-[1px] bg-slate-300 lg:hidden shrink-0 mx-1"></div>
+
+                            <!-- Botões Bloqueados (Adornados de forma compacta e premium para mobile) -->
+                            <button class="blocked-menu-item text-left px-4 py-3 text-xs font-medium text-slate-400 opacity-60 flex items-center gap-2.5 border-l-[3px] border-transparent hover:bg-slate-50 rounded-lg lg:rounded-none shrink-0 min-h-[44px]">
+                                <i class="fa-regular fa-clipboard text-sm w-4 text-center"></i>
+                                <span>Anamnese 🔒</span>
+                            </button>
+
+                            <button class="blocked-menu-item text-left px-4 py-3 text-xs font-medium text-slate-400 opacity-60 flex items-center gap-2.5 border-l-[3px] border-transparent hover:bg-slate-50 rounded-lg lg:rounded-none shrink-0 min-h-[44px]">
+                                <i class="fa-solid fa-virus-slash text-sm w-4 text-center"></i>
+                                <span>Alergias 🔒</span>
+                            </button>
+
+                            <button class="blocked-menu-item text-left px-4 py-3 text-xs font-medium text-slate-400 opacity-60 flex items-center gap-2.5 border-l-[3px] border-transparent hover:bg-slate-50 rounded-lg lg:rounded-none shrink-0 min-h-[44px]">
+                                <i class="fa-solid fa-chart-line text-sm w-4 text-center"></i>
+                                <span>Evoluções 🔒</span>
+                            </button>
+
+                            <button class="blocked-menu-item text-left px-4 py-3 text-xs font-medium text-slate-400 opacity-60 flex items-center gap-2.5 border-l-[3px] border-transparent hover:bg-slate-50 rounded-lg lg:rounded-none shrink-0 min-h-[44px]">
+                                <span class="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center shrink-0 font-bold text-[8px]">M</span>
+                                <span>Memed 🔒</span>
+                            </button>
+
+                            <button class="blocked-menu-item text-left px-4 py-3 text-xs font-medium text-slate-400 opacity-60 flex items-center gap-2.5 border-l-[3px] border-transparent hover:bg-slate-50 rounded-lg lg:rounded-none shrink-0 min-h-[44px]">
+                                <i class="fa-regular fa-file-pdf text-sm w-4 text-center"></i>
+                                <span>Atestados 🔒</span>
+                            </button>
+
+                            <button class="blocked-menu-item text-left px-4 py-3 text-xs font-medium text-slate-400 opacity-60 flex items-center gap-2.5 border-l-[3px] border-transparent hover:bg-slate-50 rounded-lg lg:rounded-none shrink-0 min-h-[44px]">
+                                <i class="fa-solid fa-file-waveform text-sm w-4 text-center"></i>
+                                <span>Laudos 🔒</span>
+                            </button>
+
+                            <button class="blocked-menu-item text-left px-4 py-3 text-xs font-medium text-slate-400 opacity-60 flex items-center gap-2.5 border-l-[3px] border-transparent hover:bg-slate-50 rounded-lg lg:rounded-none shrink-0 min-h-[44px]">
+                                <i class="fa-regular fa-folder-open text-sm w-4 text-center"></i>
+                                <span>Screening 🔒</span>
+                            </button>
+
+                            <button class="blocked-menu-item text-left px-4 py-3 text-xs font-medium text-slate-400 opacity-60 flex items-center gap-2.5 border-l-[3px] border-transparent hover:bg-slate-50 rounded-lg lg:rounded-none shrink-0 min-h-[44px]">
+                                <i class="fa-solid fa-leaf text-sm text-[#10b981] w-4 text-center"></i>
+                                <span>Support Lab 🔒</span>
+                            </button>
+
+                            <button class="blocked-menu-item text-left px-4 py-3 text-xs font-medium text-slate-400 opacity-60 flex items-center gap-2.5 border-l-[3px] border-transparent hover:bg-slate-50 rounded-lg lg:rounded-none shrink-0 min-h-[44px]">
+                                <i class="fa-regular fa-copy text-sm w-4 text-center"></i>
+                                <span>Planos 🔒</span>
+                            </button>
+
+                            <button class="blocked-menu-item text-left px-4 py-3 text-xs font-medium text-slate-400 opacity-60 flex items-center gap-2.5 border-l-[3px] border-transparent hover:bg-slate-50 rounded-lg lg:rounded-none shrink-0 min-h-[44px]">
+                                <i class="fa-regular fa-file-circle-check text-sm w-4 text-center"></i>
+                                <span>Solicitações 🔒</span>
+                            </button>
+
+                            <button class="blocked-menu-item text-left px-4 py-3 text-xs font-medium text-slate-400 opacity-60 flex items-center gap-2.5 border-l-[3px] border-transparent hover:bg-slate-50 rounded-lg lg:rounded-none shrink-0 min-h-[44px]">
+                                <i class="fa-solid fa-paperclip text-sm w-4 text-center"></i>
+                                <span>Anexos 🔒</span>
+                            </button>
+
+                            <button class="blocked-menu-item text-left px-4 py-3 text-xs font-medium text-slate-400 opacity-60 flex items-center gap-2.5 border-l-[3px] border-transparent hover:bg-slate-50 rounded-lg lg:rounded-none shrink-0 min-h-[44px]">
+                                <i class="fa-solid fa-utensils text-sm w-4 text-center"></i>
+                                <span>Dietas 🔒</span>
+                            </button>
+
+                            <button class="blocked-menu-item text-left px-4 py-3 text-xs font-medium text-slate-400 opacity-60 flex items-center gap-2.5 border-l-[3px] border-transparent hover:bg-slate-50 rounded-lg lg:rounded-none shrink-0 min-h-[44px]">
+                                <i class="fa-solid fa-square-plus text-sm w-4 text-center"></i>
+                                <span>CID's 🔒</span>
+                            </button>
+
+                            <button class="blocked-menu-item text-left px-4 py-3 text-xs font-medium text-slate-400 opacity-60 flex items-center gap-2.5 border-l-[3px] border-transparent hover:bg-slate-50 rounded-lg lg:rounded-none shrink-0 min-h-[44px]">
+                                <i class="fa-regular fa-calendar-check text-sm w-4 text-center"></i>
+                                <span>Anotações 🔒</span>
+                            </button>
+
+                            <button class="blocked-menu-item text-left px-4 py-3 text-xs font-medium text-slate-400 opacity-60 flex items-center gap-2.5 border-l-[3px] border-transparent hover:bg-slate-50 rounded-lg lg:rounded-none shrink-0 min-h-[44px]">
+                                <i class="fa-regular fa-image text-sm w-4 text-center"></i>
+                                <span>Galeria 🔒</span>
+                            </button>
+
+                            <button class="blocked-menu-item text-left px-4 py-3 text-xs font-medium text-slate-400 opacity-60 flex items-center gap-2.5 border-l-[3px] border-transparent hover:bg-slate-50 rounded-lg lg:rounded-none shrink-0 min-h-[44px]">
+                                <i class="fa-solid fa-weight-scale text-sm w-4 text-center"></i>
+                                <span>Composição corporal 🔒</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Painel de Trabalho do Prontuário -->
+                    <div class="lg:col-span-9 p-4 sm:p-6 min-h-[500px] flex flex-col justify-between bg-[#fbfbfb]">
+                        
+                        <!-- ================= MÓDULO 1: HISTÓRICO ================= -->
+                        <div id="p-view-historico" class="space-y-6">
+                            
+                            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                                <h4 class="text-sm font-bold text-slate-800 font-heading">Histórico do paciente</h4>
+                                <button class="text-slate-400 hover:text-slate-600 touch-target p-1" title="Imprimir Histórico">
+                                    <i class="fa-solid fa-print text-sm font-sans"></i>
+                                </button>
+                            </div>
+
+                            <!-- Filtros de Busca de Alta Fidelidade -->
+                            <div class="bg-white border border-slate-200 rounded-2xl p-4 grid sm:grid-cols-12 gap-3 items-end text-left shadow-sm">
+                                <div class="sm:col-span-3 space-y-1 font-sans">
+                                    <span class="text-[10px] font-bold text-slate-400 block uppercase">Itens</span>
+                                    <select class="w-full border border-slate-200 rounded px-2.5 py-1.5 text-[11px] bg-white text-slate-600 focus:outline-none">
+                                        <option>Nenhum selecionado</option>
+                                    </select>
+                                </div>
+                                <div class="sm:col-span-4 space-y-1 font-sans">
+                                    <span class="text-[10px] font-bold text-slate-400 block uppercase">Profissional <span class="text-red-500">*</span></span>
+                                    <select class="w-full border border-slate-200 rounded px-2.5 py-1.5 text-[11px] bg-white text-slate-600 focus:outline-none">
+                                        <option>Todos selecionados (17)</option>
+                                    </select>
+                                </div>
+                                <div class="sm:col-span-2 space-y-1 font-sans">
+                                    <span class="text-[10px] font-bold text-slate-400 block uppercase">De <span class="text-red-500">*</span></span>
+                                    <input type="text" value="01/07/2026" class="w-full border border-slate-200 rounded px-2.5 py-1.5 text-[11px] bg-white text-slate-700 text-center font-semibold" />
+                                </div>
+                                <div class="sm:col-span-2 space-y-1 font-sans">
+                                    <span class="text-[10px] font-bold text-slate-400 block uppercase">Até <span class="text-red-500">*</span></span>
+                                    <input type="text" value="31/07/2026" class="w-full border border-slate-200 rounded px-2.5 py-1.5 text-[11px] bg-white text-slate-700 text-center font-semibold" />
+                                </div>
+                                <div class="sm:col-span-1 font-sans">
+                                    <button class="w-full bg-[#0252fd] hover:bg-blue-700 text-white font-bold py-2 rounded text-[10px] transition-all flex items-center justify-center gap-1 active:scale-95 touch-target">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Feed/Linha de Evolução Cronológica -->
+                            <div class="relative pl-6 sm:pl-8 border-l border-slate-200 space-y-6 text-left font-sans">
+                                
+                                <!-- Card 1: Bypass (Red Pin) -->
+                                <div class="relative">
+                                    <div class="absolute -left-10 top-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center border-2 border-white shadow shadow-red-500/20">
+                                        <i class="fa-solid fa-thumbtack text-[10px]"></i>
+                                    </div>
+                                    
+                                    <div class="bg-white border border-red-200 rounded-xl p-4 space-y-2 relative shadow-sm hover:shadow-md transition-shadow font-sans">
+                                        <div class="flex justify-between items-center text-[10px] text-slate-400 border-b border-slate-50 pb-1.5 font-medium">
+                                            <div class="flex items-center gap-1.5">
+                                                <span class="bg-blue-600 text-white font-bold px-1.5 py-0.5 rounded">18/03/2026 15:10:19</span>
+                                                <span>Support Health</span>
+                                            </div>
+                                            <div class="flex items-center space-x-1.5">
+                                                <i class="fa-solid fa-eye cursor-pointer hover:text-slate-600"></i>
+                                                <i class="fa-solid fa-copy cursor-pointer hover:text-slate-600"></i>
+                                                <i class="fa-solid fa-thumbtack text-red-500 cursor-pointer"></i>
+                                            </div>
+                                        </div>
+                                        <span class="text-xs font-bold text-slate-800 block font-heading">Evolução</span>
+                                        <p class="text-slate-600 text-[11px] leading-relaxed">Cirurgião Bypass sem anel, realização 10/01/2006</p>
+                                    </div>
+                                </div>
+
+                                <!-- Card 2: Queixa Principal (Teal Pin) -->
+                                <div class="relative">
+                                    <div class="absolute -left-10 top-1 w-6 h-6 bg-[#00acc1] text-white rounded-full flex items-center justify-center border-2 border-white shadow shadow-[#00acc1]/20">
+                                        <i class="fa-solid fa-notes-medical text-[10px]"></i>
+                                    </div>
+                                    
+                                    <div class="bg-white border border-slate-200 rounded-xl p-4 space-y-3 relative shadow-sm hover:shadow-md transition-shadow font-sans">
+                                        <div class="flex justify-between items-center text-[10px] text-slate-400 border-b border-slate-50 pb-1.5 font-medium">
+                                            <div class="flex items-center gap-1.5">
+                                                <span class="bg-blue-600 text-white font-bold px-1.5 py-0.5 rounded">28/06/2026 16:57:09</span>
+                                                <span>Support Health</span>
+                                            </div>
+                                            <div class="flex items-center space-x-1.5">
+                                                <i class="fa-solid fa-eye cursor-pointer hover:text-slate-600"></i>
+                                                <i class="fa-solid fa-copy cursor-pointer hover:text-slate-600"></i>
+                                                <i class="fa-solid fa-thumbtack text-slate-300 cursor-pointer hover:text-slate-600"></i>
+                                            </div>
+                                        </div>
+                                        <span class="text-xs font-bold text-slate-800 block font-heading">Evolução</span>
+                                        
+                                        <div class="space-y-2.5 text-[11px] text-slate-600 font-sans">
+                                            <div>
+                                                <strong class="text-slate-800 block">Queixa Principal (QP):</strong>
+                                                <p>Paciente relata dor de cabeça persistente e intensa, acompanhada de náusea. Refere que a dor piora ao deitar, com sensação de latejamento contínuo durante o dia.</p>
+                                            </div>
+                                            <div>
+                                                <strong class="text-slate-800 block">História da Doença Atual (HDA):</strong>
+                                                <p>Sintomas de cefaleia e náusea vêm sendo recorrentes, com piora ao repousar a cabeça. Não há menção de outros sintomas associados, como febre, alterações visuais ou déficits neurológicos.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- ================= MÓDULO 2: RECEITAS E FÓRMULAS ================= -->
+                        <div id="p-view-receita" class="space-y-4 hidden">
+                            
+                            <!-- Toggle Tátil de Visualização Mobile para as Receitas -->
+                            <div class="flex lg:hidden bg-slate-200 p-1 rounded-xl mb-2 select-none font-sans font-semibold">
+                                <button id="recipe-btn-editor" onclick="switchRecipeMobileTab('editor')" class="flex-1 text-center py-2 rounded-lg text-xs bg-white text-slate-800 shadow-sm transition-all duration-200 min-h-[40px] flex items-center justify-center gap-1.5">
+                                    <i class="fa-regular fa-file-lines text-blue-600"></i> 📝 Ver Receita
+                                </button>
+                                <button id="recipe-btn-library" onclick="switchRecipeMobileTab('library')" class="flex-1 text-center py-2 rounded-lg text-xs text-slate-600 transition-all duration-200 min-h-[40px] flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-flask text-slate-500"></i> 🧪 Fórmulas
+                                </button>
+                            </div>
+
+                            <div class="grid lg:grid-cols-12 gap-5 items-start">
+                                
+                                <!-- Coluna Esquerda: Editor de Receitas Principal -->
+                                <div id="recipe-panel-left" class="lg:col-span-8 bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 text-left space-y-4 shadow-sm w-full">
+                                    <div class="flex justify-between items-center border-b border-slate-100 pb-2 font-heading">
+                                        <h4 class="text-sm font-extrabold text-slate-800">Adicionar receita</h4>
+                                    </div>
+
+                                    <!-- Campos Dropdowns Superiores -->
+                                    <div class="grid sm:grid-cols-2 gap-4 text-xs font-sans">
+                                        <div>
+                                            <label class="block text-slate-400 font-bold mb-1">Usar modelo</label>
+                                            <select class="w-full border border-slate-200 rounded-lg p-2 bg-white text-slate-700 focus:outline-none focus:border-blue-500 font-sans">
+                                                <option selected>Selecione um modelo</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-slate-400 font-bold mb-1">Assinar digitalmente</label>
+                                            <select class="w-full border border-slate-200 rounded-lg p-2 bg-white text-slate-700 focus:outline-none focus:border-blue-500 font-sans">
+                                                <option selected>Selecione um certificado</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Título e Data com Alinhamento Igual ao Print -->
+                                    <div class="grid sm:grid-cols-12 gap-4 items-end text-xs font-sans">
+                                        <div class="sm:col-span-6">
+                                            <label class="block text-slate-400 font-bold mb-1 font-sans">Título</label>
+                                            <input type="text" placeholder="Digite o título da receita..." class="w-full border border-slate-200 rounded-lg p-2 focus:outline-none focus:border-blue-500 font-semibold" />
+                                        </div>
+                                        <div class="sm:col-span-4">
+                                            <label class="block text-slate-400 font-bold mb-1 font-sans">Data</label>
+                                            <input type="text" id="recipe-date-input" value="20/10/2025" class="w-full border border-slate-200 rounded-lg p-2 text-center text-slate-700 font-semibold focus:outline-none" />
+                                        </div>
+                                        <div class="sm:col-span-2 flex items-center justify-start sm:justify-center pb-2 select-none">
+                                            <label class="flex items-center space-x-2 cursor-pointer font-sans">
+                                                <input type="checkbox" id="recipe-show-date" checked class="rounded border-blue-600 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer" />
+                                                <span class="text-slate-500 text-[11px] font-semibold">Mostrar Data</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- BARRA DE FERRAMENTAS DO EDITOR -->
+                                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-2 flex flex-wrap gap-1 items-center select-none text-xs font-sans">
+                                        <select class="bg-white border border-slate-200 rounded px-2 py-1 text-[11px] font-bold text-slate-600 focus:outline-none mr-1 font-sans">
+                                            <option>ROBOTO</option>
+                                        </select>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center font-bold text-slate-700">B</button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center italic text-slate-700">I</button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center underline text-slate-700">U</button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-400"><i class="fa-solid fa-eraser font-sans"></i></button>
+                                        <span class="h-4 w-[1px] bg-slate-200 mx-1"></span>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center line-through text-slate-700 font-sans">S</button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-500"><i class="fa-solid fa-highlighter"></i></button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-500"><i class="fa-solid fa-list-ul"></i></button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-500"><i class="fa-solid fa-list-ol"></i></button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-500"><i class="fa-solid fa-align-left"></i></button>
+                                        <span class="h-4 w-[1px] bg-slate-200 mx-1"></span>
+                                        <select class="bg-white border border-slate-200 rounded px-1.5 py-1 text-[11px] font-bold text-slate-600 focus:outline-none font-sans">
+                                            <option>13</option>
+                                        </select>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-700 font-bold" style="color: #ef4444;">A</button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-500"><i class="fa-solid fa-table"></i></button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-500"><i class="fa-solid fa-minus font-sans"></i></button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-500"><i class="fa-solid fa-arrow-rotate-left"></i></button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-500"><i class="fa-solid fa-arrow-rotate-right font-sans"></i></button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-500 font-serif font-sans">Tx</button>
+                                        <button class="w-7 h-7 bg-blue-600 hover:bg-blue-700 text-white rounded flex items-center justify-center ml-auto shadow-md">
+                                            <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
+                                        </button>
+                                    </div>
+
+                                    <!-- Campo de Visualização / Edição da Receita -->
+                                    <div class="border border-slate-200 rounded-xl p-4 sm:p-5 bg-white shadow-inner min-h-[360px] relative">
+                                        <div id="recipe-text-editor" contenteditable="true" class="prescription-editor text-slate-800 text-[11px] sm:text-xs focus:outline-none min-h-[320px]">--------- Emagrecimento Ansiedade e compulsao alimentar ---------
+
+Taurina ...................................................... 500 mg
+L Fenilalanina ............................................. 250 mg
+Piridoxal Fosfato ........................................... 20 mg
+Nicotinato de Inositol ................................... 100 mg
+5 Hidroxitriptofano ...................................... 200 mg
+Mucuna Pruriens .......................................... 100 mg
+Teanina ....................................................... 250 mg
+Veículo QSP .................................................. 4 cápsula(s)
+
+
+
+Mande: 30 dose(s)
+Uso oral: Tomar 2 cápsulas pela manhã e 2 cápsulas às 14 horas</div>
+                                    </div>
+                                    
+                                    <div class="flex justify-between items-center pt-2 text-xs font-sans">
+                                        <span class="text-slate-400 text-[10px] font-sans">Conteúdo editável. Digite ou clique nas fórmulas à direita.</span>
+                                        <button onclick="signRecipeDigital()" class="bg-[#0252fd] hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-xl transition text-[11px] flex items-center gap-1.5 touch-target">
+                                            <i class="fa-solid fa-signature"></i> Assinar e Salvar Receita
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Coluna Direita: Painel de Manipulados & Buscas (4/12) -->
+                                <div id="recipe-panel-right" class="hidden lg:block lg:col-span-4 bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 text-left space-y-4 shadow-sm font-sans w-full font-sans">
+                                    <div class="flex border-b border-slate-100 text-[11px] font-bold text-slate-400 font-heading select-none">
+                                        <button class="flex-1 border-b-2 border-blue-500 text-blue-600 pb-2.5 uppercase text-center">Manipulados</button>
+                                        <button class="flex-1 pb-2.5 uppercase text-center hover:text-slate-600">Industrializados</button>
+                                    </div>
+
+                                    <div class="relative">
+                                        <input type="text" id="formula-search-input" placeholder="Buscar" class="w-full border border-slate-200 rounded-lg pl-8 pr-3 py-2 text-xs focus:border-blue-500 focus:outline-none font-sans" oninput="filterFormulasList()" />
+                                        <i class="fa-solid fa-magnifying-glass text-slate-400 absolute left-3 top-3 text-[11px]"></i>
+                                    </div>
+
+                                    <div class="grid grid-cols-3 bg-[#0252fd] rounded-lg p-0.5 text-center text-[10px] font-bold text-white select-none">
+                                        <button class="bg-blue-800/80 rounded py-1.5 uppercase transition-all shadow-inner">Fórmulas</button>
+                                        <button class="hover:bg-blue-700 rounded py-1.5 uppercase transition-all">Protocolos</button>
+                                        <button class="hover:bg-blue-700 rounded py-1.5 uppercase transition-all">Substâncias</button>
+                                    </div>
+
+                                    <!-- Filtro por Checkbox de Alta Fidelidade (Quadrado Azul) -->
+                                    <label class="flex items-center space-x-2 cursor-pointer select-none font-sans text-[11px] text-slate-500 font-semibold pt-1">
+                                        <input type="checkbox" id="formula-filter-support" class="rounded border-blue-600 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer" onchange="filterFormulasList()" />
+                                        <span>Exibir modelos da Support Health</span>
+                                    </label>
+
+                                    <!-- Lista Completa de Fórmulas do Print -->
+                                    <div id="formulas-cards-list" class="space-y-1.5 max-h-[310px] overflow-y-auto no-scrollbar font-sans text-xs w-full">
+                                    </div>
+
+                                    <!-- Rodapé do Painel -->
+                                    <div class="pt-3 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-sans">
+                                        <span>Total Ativos Selecionados</span>
+                                        <strong id="selected-actives-count" class="text-slate-800">7 Ativos</strong>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- ================= MÓDULO 3: PEDIDO DE EXAMES ================= -->
+                        <div id="p-view-exames" class="space-y-4 hidden">
+                            
+                            <!-- Toggle Tátil de Visualização Mobile para os Pedidos de Exame -->
+                            <div class="flex lg:hidden bg-slate-200 p-1 rounded-xl mb-2 select-none font-sans font-semibold">
+                                <button id="exams-btn-editor" onclick="switchExamsMobileTab('editor')" class="flex-1 text-center py-2 rounded-lg text-xs bg-white text-slate-800 shadow-sm transition-all duration-200 min-h-[40px] flex items-center justify-center gap-1.5">
+                                    <i class="fa-regular fa-file-lines text-blue-600"></i> 📝 Ver Pedido
+                                </button>
+                                <button id="exams-btn-library" onclick="switchExamsMobileTab('library')" class="flex-1 text-center py-2 rounded-lg text-xs text-slate-600 transition-all duration-200 min-h-[40px] flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-list-check text-slate-500"></i> 📋 Tipos
+                                </button>
+                            </div>
+
+                            <div class="grid lg:grid-cols-12 gap-5 items-start">
+                                
+                                <!-- Coluna Esquerda: Editor de Pedidos Principal -->
+                                <div id="exams-panel-left" class="lg:col-span-8 bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 text-left space-y-4 shadow-sm font-sans w-full">
+                                    <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                                        <h4 class="text-sm font-extrabold text-slate-800 font-heading">Adicionar pedido</h4>
+                                    </div>
+
+                                    <!-- Campo Título com Asterisco Vermelho -->
+                                    <div class="space-y-1">
+                                        <label class="block text-slate-500 font-bold text-xs"><span class="text-red-500">*</span> Título</label>
+                                        <input type="text" id="exam-order-title" value="Hematologia" class="w-full border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 font-medium focus:border-blue-500 focus:outline-none font-bold" />
+                                    </div>
+
+                                    <!-- Assinar Digitalmente e Data -->
+                                    <div class="grid sm:grid-cols-12 gap-4 items-end text-xs font-sans">
+                                        <div class="sm:col-span-6 space-y-1">
+                                            <label class="block text-slate-400 font-bold mb-1">Assinar digitalmente</label>
+                                            <select class="w-full border border-slate-200 rounded-lg p-2.5 bg-white text-slate-600 focus:outline-none focus:border-blue-500 font-semibold">
+                                                <option selected>Selecione um certificado</option>
+                                            </select>
+                                        </div>
+                                        <div class="sm:col-span-4 space-y-1">
+                                            <label class="block text-slate-500 font-bold mb-1"><span class="text-red-500">*</span> Data</label>
+                                            <input type="text" id="exam-date-input" value="07/07/2026" class="w-full border border-slate-200 rounded-lg p-2.5 text-center text-slate-700 font-semibold focus:outline-none" />
+                                        </div>
+                                        <div class="sm:col-span-2 flex items-center justify-start sm:justify-center pb-2 select-none">
+                                            <label class="flex items-center space-x-2 cursor-pointer font-sans">
+                                                <input type="checkbox" id="exam-show-date" checked class="rounded border-blue-600 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer" />
+                                                <span class="text-slate-500 text-[11px] font-semibold">Mostrar Data</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Barra de ferramentas do editor de exames -->
+                                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-2 flex flex-wrap gap-1 items-center select-none text-xs font-sans">
+                                        <select class="bg-white border border-slate-200 rounded px-2 py-1 text-[11px] font-bold text-slate-600 focus:outline-none mr-1 font-sans">
+                                            <option>ROBOTO</option>
+                                        </select>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center font-bold text-slate-700">B</button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center italic text-slate-700">I</button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center underline text-slate-700">U</button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-400"><i class="fa-solid fa-eraser"></i></button>
+                                        <span class="h-4 w-[1px] bg-slate-200 mx-1"></span>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center line-through text-slate-700">S</button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-500"><i class="fa-solid fa-highlighter"></i></button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-500"><i class="fa-solid fa-list-ul"></i></button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-500"><i class="fa-solid fa-list-ol"></i></button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-500"><i class="fa-solid fa-align-left"></i></button>
+                                        <span class="h-4 w-[1px] bg-slate-200 mx-1"></span>
+                                        <select class="bg-white border border-slate-200 rounded px-1.5 py-1 text-[11px] font-bold text-slate-600 focus:outline-none font-sans">
+                                            <option>13</option>
+                                        </select>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-700 font-bold" style="color: #ef4444;">A</button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-500"><i class="fa-solid fa-table"></i></button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-500"><i class="fa-solid fa-minus font-sans"></i></button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-500"><i class="fa-solid fa-arrow-rotate-left"></i></button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-500"><i class="fa-solid fa-arrow-rotate-right font-sans"></i></button>
+                                        <button class="w-7 h-7 hover:bg-slate-200 rounded flex items-center justify-center text-slate-500 font-serif font-sans">Tx</button>
+                                        <button class="w-7 h-7 bg-blue-600 hover:bg-blue-700 text-white rounded flex items-center justify-center ml-auto shadow-md">
+                                            <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
+                                        </button>
+                                    </div>
+
+                                    <!-- Campo de Conteúdo com Asterisco Vermelho e Lista de Exames Sanguíneos -->
+                                    <div class="space-y-1">
+                                        <label class="block text-slate-500 font-bold text-xs"><span class="text-red-500">*</span> Conteúdo</label>
+                                        <div class="border border-slate-200 rounded-xl p-4 sm:p-5 bg-white shadow-inner min-h-[360px] relative">
+                                            <div id="exam-text-editor" contenteditable="true" class="prescription-editor text-slate-800 text-[11px] sm:text-xs focus:outline-none min-h-[320px]">Hemograma completo
+VHS
+Leucograma
+Eritrograma
+Plaquetas
+Hemoglobina (Hb)
+Hematócrito (Ht)
+Reticulócitos
+Prova do laço
+T. de sangramento (TS)
+T. de coagulação (TC)
+T. de protrombina (TP) + INR
+T. de tromboplastina (TTPa)
+T. de trombina (TT)
+Fibrinogênio
+Antitrombina III
+Agregação plaquetária
+T. de coag. ativado (TCA)
+Dímero D (DDI)
+Falcização</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex justify-between items-center pt-2 font-sans text-xs">
+                                        <span class="text-slate-400 text-[10px] font-sans">Conteúdo editável. Clique nos perfis de exames à direita.</span>
+                                        <button onclick="signRecipeDigital()" class="bg-[#0252fd] hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-xl transition text-[11px] flex items-center gap-1.5 touch-target font-sans">
+                                            <i class="fa-solid fa-signature"></i> Assinar e Solicitar Exames
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Coluna Direita: Tipos de pedidos (4/12) (Idêntica à imagem) -->
+                                <div id="exams-panel-right" class="hidden lg:block lg:col-span-4 bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 text-left space-y-4 shadow-sm font-sans w-full">
+                                    <div class="flex justify-between items-center pb-1">
+                                        <strong class="text-slate-800 text-xs font-bold font-heading">Tipos de pedidos</strong>
+                                    </div>
+
+                                    <div class="relative font-sans">
+                                        <input type="text" id="exam-search-input" placeholder="Pesquisar" class="w-full border border-slate-200 rounded-lg pl-8 pr-3 py-2 text-xs focus:border-blue-500 focus:outline-none" oninput="filterExamsList()" />
+                                        <i class="fa-solid fa-magnifying-glass text-slate-400 absolute left-3 top-3.5 text-[10px]"></i>
+                                    </div>
+
+                                    <div class="flex items-center space-x-2 py-1 select-none border-b border-slate-50 pb-2">
+                                        <div class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" class="sr-only peer">
+                                            <div class="w-7 h-4 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-blue-600"></div>
+                                        </div>
+                                        <span class="text-[11px] font-semibold text-slate-500 font-sans">Meus modelos</span>
+                                    </div>
+
+                                    <!-- Lista de Categorias de Exames Funcional do Print -->
+                                    <div id="exams-categories-list" class="space-y-1.5 max-h-[350px] overflow-y-auto no-scrollbar text-xs w-full">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 3️⃣ SEÇÃO DE PLANOS: Escolha o plano certo para o momento da sua clínica -->
+    <section id="planos" class="py-16 sm:py-24 bg-slate-50 border-t border-slate-200 reveal scroll-mt-20 font-sans">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 font-sans">
+            
+            <!-- Cabeçalho -->
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-[#0252fd] text-xs font-bold uppercase tracking-widest block font-heading">Planos de Assinatura</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-heading font-heading">Escolha o plano certo para o momento da sua clínica</h2>
+                <p class="text-slate-600 text-sm sm:text-base leading-relaxed px-2 font-medium">
+                    Agende uma demonstração e veja como o sistema se aplica à rotina da sua clínica.
+                </p>
+            </div>
+
+            <!-- Grade de Planos -->
+            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch font-sans">
+                
+                <!-- Plano 1: Support Essencial -->
+                <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 flex flex-col justify-between hover-lift-3d shadow-sm">
+                    <div class="space-y-6 text-left">
+                        <div class="space-y-2">
+                            <span class="text-slate-400 font-bold text-[10px] uppercase tracking-wider block font-heading">Clareza Operacional</span>
+                            <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900 font-heading">Support Essencial</h3>
+                            <p class="text-slate-500 text-xs sm:text-sm font-medium">Você organiza a rotina clínica com simplicidade e clareza operacional:</p>
+                        </div>
+                        <ul class="space-y-3.5 text-xs sm:text-sm text-slate-600 font-medium font-sans">
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-circle-check text-emerald-500 mt-1"></i>
+                                <span>Prontuário e teleconsulta integrados;</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-circle-check text-emerald-500 mt-1"></i>
+                                <span>Agenda e comunicação automatizada;</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-circle-check text-emerald-500 mt-1"></i>
+                                <span>Protocolos de tratamento organizados;</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-circle-check text-emerald-500 mt-1"></i>
+                                <span>IA aplicada no apoio clínico.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-8 pt-4 border-t border-slate-100 font-sans">
+                        <a href="https://wa.me/553189196026?text=Olá%20Fernando,%20gostaria%20de%20agendar%20uma%20demonstração%20personalizada%20do%20plano%20Support%20Essencial." target="_blank" class="w-full text-center border-2 border-[#0252fd] text-[#0252fd] hover:bg-blue-50 py-3.5 rounded-xl font-bold transition-all text-sm block active:scale-95 touch-target flex items-center justify-center gap-2 min-h-[44px]">
+                            <i class="fa-brands fa-whatsapp text-base"></i> Agendar Demonstração
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Plano 2: Support Avançado -->
+                <div class="bg-white border-2 border-[#0252fd] rounded-3xl p-6 sm:p-8 flex flex-col justify-between hover-lift-3d shadow-xl relative">
+                    <div class="absolute -top-3.5 right-6 bg-[#0252fd] text-white text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded-full font-heading">
+                        Mais Completo
+                    </div>
+                    <div class="space-y-6 text-left">
+                        <div class="space-y-2">
+                            <span class="text-[#0252fd] font-bold text-[10px] uppercase tracking-wider block font-heading font-heading">Controle Operacional e Financeiro</span>
+                            <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900 font-heading">Support Avançado</h3>
+                            <p class="text-slate-500 text-xs sm:text-sm font-medium">Você passa a conta com controle operacional e financeiro mais avançado:</p>
+                        </div>
+                        <ul class="space-y-3.5 text-xs sm:text-sm text-slate-600 font-medium font-sans">
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-circle-check text-emerald-500 mt-1"></i>
+                                <span>Estoque rastreado com precisão;</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-circle-check text-emerald-500 mt-1"></i>
+                                <span>Precificação automática em tempo real;</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-circle-check text-emerald-500 mt-1"></i>
+                                <span>Financeiro e DRE integrados;</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-circle-check text-emerald-500 mt-1"></i>
+                                <span>Relatórios estratégicos para decisão;</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-circle-check text-emerald-500 mt-1"></i>
+                                <span>Controle detalhado de comissões e orçamentos.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-8 pt-4 border-t border-slate-100 font-sans">
+                        <a href="https://wa.me/553189196026?text=Olá%20Fernando,%20gostaria%20de%20agendar%20uma%20demonstração%20personalizada%20do%20plano%20Support%20Avançado." target="_blank" class="w-full text-center bg-[#0252fd] hover:bg-blue-700 text-white py-3.5 rounded-xl font-bold transition-all text-sm block active:scale-95 touch-target flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 min-h-[44px]">
+                            <i class="fa-brands fa-whatsapp text-base"></i> Agendar Demonstração
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 4️⃣ SEÇÃO: Gestão Integrada e Operação Clínica -->
+    <section id="gestao" class="py-12 sm:py-20 bg-white border-t border-slate-100 reveal scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+            <span class="text-[#0252fd] text-xs font-bold uppercase tracking-widest block font-heading">Controle Total e Sem Planilhas</span>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-heading">Gerenciando sua operação de ponta a ponta</h2>
+            <p class="text-slate-500 text-sm sm:text-base max-w-3xl mx-auto font-medium font-sans leading-relaxed">
+                Estruture e automatize os bastidores financeiros, estoques e orçamentos do seu consultório de forma robusta e inteligente.
+            </p>
+            
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10 text-left font-sans">
+                
+                <!-- 1. Agenda médica online -->
+                <div class="bg-slate-50 border border-slate-200 p-6 sm:p-8 rounded-2xl shadow-sm hover:shadow-md hover-lift-3d transition-all duration-300 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-10 h-10 bg-blue-50 text-[#0252fd] rounded-xl flex items-center justify-center text-lg shadow-inner">
+                            <i class="fa-regular fa-calendar-check text-base"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 font-heading">Agenda médica online</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed font-medium">Gestão completa de atendimentos, equipes e salas.</p>
+                    </div>
+                </div>
+
+                <!-- 2. Prontuário eletrônico -->
+                <div class="bg-slate-50 border border-slate-200 p-6 sm:p-8 rounded-2xl shadow-sm hover:shadow-md hover-lift-3d transition-all duration-300 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-10 h-10 bg-blue-50 text-[#0252fd] rounded-xl flex items-center justify-center text-lg shadow-inner">
+                            <i class="fa-solid fa-notes-medical text-base"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 font-heading">Prontuário eletrônico</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed font-medium">Dados clínicos organizados com segurança e rastreabilidade.</p>
+                    </div>
+                </div>
+
+                <!-- 3. Controle de estoque -->
+                <div class="bg-slate-50 border border-slate-200 p-6 sm:p-8 rounded-2xl shadow-sm hover:shadow-md hover-lift-3d transition-all duration-300 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-10 h-10 bg-blue-50 text-[#0252fd] rounded-xl flex items-center justify-center text-lg shadow-inner">
+                            <i class="fa-solid fa-boxes-stacked text-base"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 font-heading">Controle de estoque</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed font-medium">Controle de estoque para clínicas com rastreabilidade de lote e validade.</p>
+                    </div>
+                </div>
+
+                <!-- 4. Gestão financeira -->
+                <div class="bg-slate-50 border border-slate-200 p-6 sm:p-8 rounded-2xl shadow-sm hover:shadow-md hover-lift-3d transition-all duration-300 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-10 h-10 bg-blue-50 text-[#0252fd] rounded-xl flex items-center justify-center text-lg shadow-inner">
+                            <i class="fa-solid fa-chart-line text-base"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 font-heading">Gestão financeira</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed font-medium">Sistema financeiro para clínicas integrado à operação.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção do Especialista (Fernando Lino) -->
+    <section id="especialista" class="py-16 sm:py-24 bg-gradient-to-b from-white to-slate-50 border-t border-slate-100 reveal font-sans">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 font-sans">
+            <div class="relative bg-slate-900 text-white p-8 sm:p-14 rounded-[32px] shadow-2xl overflow-hidden grid md:grid-cols-12 gap-8 sm:gap-12 items-center hover:shadow-blue-900/10 hover:shadow-3xl transition-all duration-500">
+                
+                <!-- Elementos Estéticos de Fundo Premium -->
+                <div class="absolute -top-10 -right-10 w-64 h-64 bg-blue-600/10 rounded-full blur-[80px] pointer-events-none"></div>
+                <div class="absolute -bottom-12 -left-12 w-80 h-80 bg-blue-50/5 rounded-full blur-[100px] pointer-events-none"></div>
+                
+                <div class="md:col-span-8 flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8 text-center sm:text-left relative z-10 font-sans">
+                    <!-- Foto em Moldura Redonda com Glow Sutil -->
+                    <div class="relative shrink-0 group">
+                        <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-2xl overflow-hidden border-2 border-blue-500/50 bg-slate-800 shadow-[0_0_30px_rgba(2,82,253,0.25)] transition-transform duration-500 group-hover:scale-[1.03]">
+                            <img src="IMG_70162.jpg" alt="Fernando Lino" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80'">
+                        </div>
+                        <span class="absolute bottom-1 right-1 w-4 h-4 bg-emerald-500 border-2 border-slate-900 rounded-full flex items-center justify-center animate-pulse"></span>
+                    </div>
+
+                    <div class="space-y-4 w-full">
+                        <div class="space-y-1">
+                            <span class="text-blue-400 text-xs font-bold uppercase tracking-widest block font-heading">Consultor Responsável</span>
+                            <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-heading tracking-tight leading-none">Fernando Lino</h2>
+                        </div>
+                        
+                        <!-- Badges com as Credenciais Oficiais -->
+                        <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
+                            <span class="bg-slate-800 border border-slate-700/80 text-blue-100 text-[11px] font-semibold py-1 px-3 rounded-full flex items-center gap-1.5 leading-none">
+                                <i class="fa-solid fa-briefcase text-blue-400"></i> Especialista em negócios @grupotgpm
+                            </span>
+                            <span class="bg-slate-800 border border-slate-700/80 text-blue-100 text-[11px] font-semibold py-1 px-3 rounded-full flex items-center gap-1.5 leading-none font-sans">
+                                <i class="fa-solid fa-microphone text-blue-400"></i> Palestrante @supporthealthbrasil
+                            </span>
+                        </div>
+
+                        <!-- Métricas e Autoridade -->
+                        <div class="pt-2 border-t border-slate-800/80 flex items-center gap-3 justify-center sm:justify-start">
+                            <div class="flex -space-x-2 shrink-0 font-sans">
+                                <span class="w-7 h-7 rounded-full bg-slate-700 border-2 border-slate-950 flex items-center justify-center text-[8px] font-bold">🩺</span>
+                                <span class="w-7 h-7 rounded-full bg-slate-700 border-2 border-slate-950 flex items-center justify-center text-[8px] font-bold">🏥</span>
+                                <span class="w-7 h-7 rounded-full bg-slate-700 border-2 border-slate-950 flex items-center justify-center text-[8px] font-bold">💉</span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-300 leading-snug font-sans">
+                                Mais de <strong class="text-white font-extrabold underline decoration-blue-500 decoration-2 underline-offset-4 font-heading">3.000 clínicas licenciadas</strong> por mim!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botão de Ação Direto com Efeito de Pulso -->
+                <div class="md:col-span-4 w-full relative z-10 flex flex-col items-center">
+                    <a href="https://wa.me/553189196026?text=Olá%20Fernando,%20gostaria%20de%20agendar%20uma%20demonstração%20personalizada%20do%20sistema." target="_blank" rel="noopener noreferrer" class="w-full text-center bg-blue-600 hover:bg-blue-700 active:scale-95 text-white py-4 px-6 rounded-2xl font-bold transition-all text-sm block shadow-lg shadow-blue-600/35 flex items-center justify-center gap-2 group touch-target relative overflow-hidden min-h-[44px]">
+                        <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-500 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                        <i class="fa-brands fa-whatsapp text-lg relative z-10"></i> 
+                        <span class="relative z-10 font-sans">Fale Conosco</span>
+                    </a>
+                    <span class="text-[10px] text-slate-400 mt-2 font-mono">Contato: +55 31 8919-6026</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FLOATING POPUP LATERAL DE ALTA CONVERSÃO (FERNANDO LINO ONLINE) -->
+    <div id="lateral-popup" class="fixed bottom-5 right-5 max-w-sm w-[90%] sm:w-[350px] bg-white border border-slate-200 rounded-2xl shadow-2xl p-4 z-[100] transform translate-y-20 opacity-0 pointer-events-none transition-all duration-700 select-none">
+        <div class="space-y-3.5 font-sans">
+            <!-- Topo do Chat (Fernando Perfil) -->
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                <div class="flex items-center space-x-2.5">
+                    <div class="relative shrink-0">
+                        <div class="w-9 h-9 rounded-full overflow-hidden border border-slate-200">
+                            <img src="IMG_70162.jpg" alt="Fernando Lino" class="w-full h-full object-cover">
+                        </div>
+                        <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full flex items-center justify-center animate-pulse"></span>
+                    </div>
+                    <div class="text-left leading-tight">
+                        <strong class="text-xs font-bold text-slate-800 font-heading block">Fernando Lino</strong>
+                        <span class="text-[9px] text-emerald-500 font-semibold uppercase tracking-wider block font-sans">Online agora</span>
+                    </div>
+                </div>
+                <button onclick="closeLateralPopup()" class="w-6 h-6 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-600 transition-colors" aria-label="Fechar pop-up">
+                    <i class="fa-solid fa-xmark text-[11px] font-black"></i>
+                </button>
+            </div>
+
+            <!-- Balão de Texto do Chat -->
+            <div class="bg-blue-50/50 border border-blue-100/50 rounded-2xl p-3 text-left">
+                <p class="text-[11px] sm:text-xs text-slate-700 leading-relaxed font-medium">
+                    Doutor(a), para quem trabalha ou pretende iniciar com injetáveis, nós somos o sistema número 1 do Brasil. Vamos reservar um momento para eu te apresentar tudo isso na prática?
+                </p>
+            </div>
+
+            <!-- Ação de WhatsApp -->
+            <a href="https://wa.me/553189196026?text=Doutor(a),%20gostaria%20de%20agendar%20uma%20demonstração%20para%20conhecer%20o%20sistema%20da%20Support%20Clinic." target="_blank" rel="noopener noreferrer" class="w-full bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 text-xs transition-all shadow-md shadow-emerald-500/10 touch-target leading-none font-sans min-h-[44px]">
+                <i class="fa-brands fa-whatsapp text-sm animate-bounce"></i> Agendar Demonstração
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-500 text-xs py-8 text-center border-t border-slate-800 font-sans">
+        <p>&copy; 2026 Support Health Brasil. Grupo TGPM.</p>
+    </footer>
+
+    <script>
+        // Dados do Simulador de Injetáveis (Seção 1)
+        const simData = {
+            protocols: [
+                {
+                    id: "hmb-performance",
+                    name: "Aminoacidos + HMB para performance (IM)",
+                    ingredients: [
+                        { name: "Hidroximetilbutirato (HMB) ...", qty: 1, unit: "Unidade", price: 50.00 },
+                        { name: "Inositol + Taurina (5%+5%) ...", qty: 1, unit: "Unidade", price: 40.00 },
+                        { name: "L-Arginina 1000mg/2ml - Inj...", qty: 1, unit: "Unidade", price: 35.00 },
+                        { name: "L-Carnitina+L-Ornitina 300m...", qty: 1, unit: "Unidade", price: 45.00 },
+                        { name: "POOL de Minerais (Se+Cu+Mn+...", qty: 1, unit: "Unidade", price: 41.23 }
+                    ]
+                },
+                {
+                    id: "alopecia-ev",
+                    name: "Alopecia/ Queda capilar/ Crescimento capilar/ Eflúvio (EV)",
+                    ingredients: [
+                        { name: "Biotina 10mg/2ml - Ampola ...", qty: 1, unit: "Unidade", price: 30.00 },
+                        { name: "Pantenol 100mg/2ml - Ampola...", qty: 1, unit: "Unidade", price: 25.00 },
+                        { name: "Silício Orgânico 10mg/2ml ...", qty: 1, unit: "Unidade", price: 45.00 }
+                    ]
+                },
+                {
+                    id: "alopecia-telogeno",
+                    name: "Alopecia/Eflúvio Telógeno",
+                    ingredients: [
+                        { name: "Biotina 10mg/2ml - Ampola ...", qty: 1, unit: "Unidade", price: 30.00 },
+                        { name: "Pantenol 100mg/2ml - Ampola...", qty: 1, unit: "Unidade", price: 25.00 }
+                    ]
+                },
+                {
+                    id: "alopecia-telogeno-queda",
+                    name: "Alopecia/Eflúvio Telógeno/Queda Capilar (EV e IM)",
+                    ingredients: [
+                        { name: "Biotina 10mg/2ml - Ampola ...", qty: 1, unit: "Unidade", price: 30.00 },
+                        { name: "Pantenol 100mg/2ml - Ampola...", qty: 1, unit: "Unidade", price: 25.00 },
+                        { name: "Silício Orgânico 10mg/2ml ...", qty: 1, unit: "Unidade", price: 45.00 }
+                    ]
+                },
+                {
+                    id: "alzheimer",
+                    name: "Alzheimer/ Melhora cognitiva/ Memoria/ Aumento da produç...",
+                    ingredients: [
+                        { name: "Piracetam 1g/5ml - Ampola ...", qty: 1, unit: "Unidade", price: 48.00 },
+                        { name: "Coenzima Q10 50mg/ml ...", qty: 1, unit: "Unidade", price: 55.00 }
+                    ]
+                },
+                {
+                    id: "metabolismo",
+                    name: "Aminoacidos aceleradores de metabolismo + HMB/ Queima ...",
+                    ingredients: [
+                        { name: "L-Carnitina 500mg/2ml ...", qty: 1, unit: "Unidade", price: 38.00 },
+                        { name: "Hidroximetilbutirato (HMB) ...", qty: 1, unit: "Unidade", price: 50.00 }
+                    ]
+                },
+                {
+                    id: "massa-ev",
+                    name: "Aminoacidos para ganho de massa/ Reducao de gordura (EV)",
+                    ingredients: [
+                        { name: "BCAA (Val+Leuc+Isoleuc) ...", qty: 1, unit: "Unidade", price: 45.00 },
+                        { name: "L-Glutamina 200mg/2ml ...", qty: 1, unit: "Unidade", price: 35.00 }
+                    ]
+                },
+                {
+                    id: "massa-im",
+                    name: "Aminoacidos para ganho de massa/ Reducao de gordura (IM)",
+                    ingredients: [
+                        { name: "BCAA (Val+Leuc+Isoleuc) ...", qty: 1, unit: "Unidade", price: 45.00 },
+                        { name: "L-Arginina 1000mg/2ml - Inj...", qty: 1, unit: "Unidade", price: 35.00 }
+                    ]
+                }
+            ],
+            selectedProtocol: null,
+            activeIngredients: []
+        };
+        simData.selectedProtocol = simData.protocols[0];
+        simData.activeIngredients = JSON.parse(JSON.stringify(simData.protocols[0].ingredients));
+
+        // LÓGICA DE ABAS DE SIMULADOR INTEGRADAS (PARA MOBILE)
+        function switchSimulatorMobileTab(tab) {
+            const btnEditor = document.getElementById("sim-btn-editor");
+            const btnLibrary = document.getElementById("sim-btn-library");
+            const leftPanel = document.getElementById("sim-panel-left");
+            const rightPanel = document.getElementById("sim-panel-right");
+
+            if(tab === 'editor') {
+                btnEditor.className = "flex-1 text-center py-2.5 rounded-lg text-xs bg-white text-slate-800 shadow-sm transition-all duration-200 flex items-center justify-center gap-1.5 min-h-[40px]";
+                btnLibrary.className = "flex-1 text-center py-2.5 rounded-lg text-xs text-slate-600 transition-all duration-200 flex items-center justify-center gap-1.5 min-h-[40px]";
+                leftPanel.classList.remove('hidden');
+                rightPanel.classList.add('hidden');
+            } else {
+                btnEditor.className = "flex-1 text-center py-2.5 rounded-lg text-xs text-slate-600 transition-all duration-200 flex items-center justify-center gap-1.5 min-h-[40px]";
+                btnLibrary.className = "flex-1 text-center py-2.5 rounded-lg text-xs bg-white text-slate-800 shadow-sm transition-all duration-200 flex items-center justify-center gap-1.5 min-h-[40px]";
+                leftPanel.classList.add('hidden');
+                rightPanel.classList.remove('hidden');
+                rightPanel.classList.add('flex');
+            }
+        }
+
+        // Toggle Abas para as Receitas
+        function switchRecipeMobileTab(tab) {
+            const btnEditor = document.getElementById("recipe-btn-editor");
+            const btnLibrary = document.getElementById("recipe-btn-library");
+            const panelLeft = document.getElementById("recipe-panel-left");
+            const panelRight = document.getElementById("recipe-panel-right");
+
+            if(tab === 'editor') {
+                btnEditor.classList.add("bg-white", "text-slate-800", "shadow-sm");
+                btnEditor.classList.remove("text-slate-600");
+                btnLibrary.classList.remove("bg-white", "text-slate-800", "shadow-sm");
+                btnLibrary.classList.add("text-slate-600");
+                panelLeft.classList.remove('hidden');
+                panelRight.classList.add('hidden');
+            } else {
+                btnLibrary.classList.add("bg-white", "text-slate-800", "shadow-sm");
+                btnLibrary.classList.remove("text-slate-600");
+                btnEditor.classList.remove("bg-white", "text-slate-800", "shadow-sm");
+                btnEditor.classList.add("text-slate-600");
+                panelLeft.classList.add('hidden');
+                panelRight.classList.remove('hidden');
+            }
+        }
+
+        // Toggle Abas para os Exames
+        function switchExamsMobileTab(tab) {
+            const btnEditor = document.getElementById("exams-btn-editor");
+            const btnLibrary = document.getElementById("exams-btn-library");
+            const panelLeft = document.getElementById("exams-panel-left");
+            const panelRight = document.getElementById("exams-panel-right");
+
+            if(tab === 'editor') {
+                btnEditor.classList.add("bg-white", "text-slate-800", "shadow-sm");
+                btnEditor.classList.remove("text-slate-600");
+                btnLibrary.classList.remove("bg-white", "text-slate-800", "shadow-sm");
+                btnLibrary.classList.add("text-slate-600");
+                panelLeft.classList.remove('hidden');
+                panelRight.classList.add('hidden');
+            } else {
+                btnLibrary.classList.add("bg-white", "text-slate-800", "shadow-sm");
+                btnLibrary.classList.remove("text-slate-600");
+                btnEditor.classList.remove("bg-white", "text-slate-800", "shadow-sm");
+                btnEditor.classList.add("text-slate-600");
+                panelLeft.classList.add('hidden');
+                panelRight.classList.remove('hidden');
+            }
+        }
+
+        // Renderiza lista de protocolos na direita
+        function renderSimulatorProtocolsList(filteredList) {
+            const listContainer = document.getElementById("sim-protocols-list");
+            if(!listContainer) return;
+            listContainer.innerHTML = "";
+
+            const protocolsToRender = filteredList || simData.protocols;
+
+            protocolsToRender.forEach(proto => {
+                const isActive = simData.selectedProtocol && simData.selectedProtocol.id === proto.id;
+                const button = document.createElement("button");
+                button.className = `w-full text-left p-3 border-b border-slate-100 transition-all duration-200 flex items-center justify-between group active:bg-slate-100 ${
+                    isActive ? "bg-slate-50 font-bold text-slate-800" : "bg-white text-slate-700 hover:bg-slate-50"
+                }`;
+                button.onclick = () => selectSimulatorProtocol(proto.id);
+                button.innerHTML = `
+                    <span class="truncate pr-2 text-[11px] font-medium text-slate-700 select-none">${proto.name}</span>
+                    <i class="fa-regular fa-eye text-slate-400 group-hover:text-slate-600 text-[10px] shrink-0"></i>
+                `;
+                listContainer.appendChild(button);
+            });
+        }
+
+        function selectSimulatorProtocol(id) {
+            const proto = simData.protocols.find(p => p.id === id);
+            if (!proto) return;
+            simData.selectedProtocol = proto;
+            simData.activeIngredients = JSON.parse(JSON.stringify(proto.ingredients));
+            document.getElementById("sim-protocol-title").textContent = proto.name;
+            renderSimulatorIngredients();
+            recalculateSimulatorPrice();
+            renderSimulatorProtocolsList();
+
+            // Usabilidade tátil: em celulares, faz scroll suave e volta ao editor
+            if (window.innerWidth < 1024) {
+                switchSimulatorMobileTab('editor');
+                document.getElementById("sim-panel-left").scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // Renderiza ingredientes do simulador de injetáveis
+        function renderSimulatorIngredients() {
+            const container = document.getElementById("sim-ingredients-list");
+            if(!container) return; container.innerHTML = "";
+
+            if (simData.activeIngredients.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-6 text-slate-400 font-sans">
+                        <i class="fa-solid fa-circle-info text-lg mb-1 block"></i>
+                        <span>Nenhum ativo na lista. Selecione outro protocolo.</span>
+                    </div>`;
+                return;
+            }
+
+            simData.activeIngredients.forEach((ing, index) => {
+                const div = document.createElement("div");
+                div.className = "flex items-center justify-between py-1.5 text-[11px] text-slate-700 font-medium border-b border-slate-50 font-sans select-none";
+                div.innerHTML = `
+                    <span class="truncate max-w-[130px] sm:max-w-[200px] text-slate-600" title="${ing.name}">${ing.name}</span>
+                    <div class="flex items-center space-x-2 sm:space-x-4">
+                        <div class="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+                            <!-- Botões de Stepper Grandes para Dedos (40x40px) -->
+                            <button onclick="changeIngredientQty(${index}, -1)" class="w-8 h-8 bg-white hover:bg-slate-200 active:scale-95 text-slate-600 rounded-md flex items-center justify-center font-bold text-xs transition-all">-</button>
+                            <input type="number" min="1" max="50" value="${ing.qty}" class="w-8 border-none text-center py-0.5 text-xs text-slate-800 font-bold focus:outline-none bg-transparent" onchange="updateIngredientQty(${index}, this.value)" />
+                            <button onclick="changeIngredientQty(${index}, 1)" class="w-8 h-8 bg-white hover:bg-slate-200 active:scale-95 text-slate-600 rounded-md flex items-center justify-center font-bold text-xs transition-all">+</button>
+                        </div>
+                        <span class="text-slate-400 font-medium text-[10px] w-12 text-left">${ing.unit}</span>
+                        <button onclick="removeSimulatorIngredient(${index})" class="text-red-400 hover:text-red-700 active:scale-90 p-2 transition-all" title="Remover Substância">
+                            <i class="fa-solid fa-xmark text-sm font-black"></i>
+                        </button>
+                    </div>`;
+                container.appendChild(div);
+            });
+        }
+
+        function changeIngredientQty(index, change) {
+            let newQty = (simData.activeIngredients[index].qty || 1) + change;
+            if (newQty < 1) newQty = 1;
+            simData.activeIngredients[index].qty = newQty;
+            renderSimulatorIngredients();
+            recalculateSimulatorPrice();
+        }
+
+        function updateIngredientQty(index, val) {
+            const parsed = parseInt(val);
+            if (isNaN(parsed) || parsed < 1) return;
+            simData.activeIngredients[index].qty = parsed;
+            recalculateSimulatorPrice();
+        }
+
+        function removeSimulatorIngredient(index) {
+            simData.activeIngredients.splice(index, 1);
+            renderSimulatorIngredients();
+            recalculateSimulatorPrice();
+        }
+
+        function clearSimulatorIngredients() {
+            simData.activeIngredients = [];
+            renderSimulatorIngredients();
+            recalculateSimulatorPrice();
+        }
+
+        function recalculateSimulatorPrice() {
+            let sessions = parseInt(document.getElementById("sim-sessions-input").value) || 1;
+            let frequency = parseInt(document.getElementById("sim-frequency-input").value) || 1;
+            
+            if (sessions < 1) sessions = 1;
+            if (frequency < 1) frequency = 1;
+
+            let baseSum = 0;
+            simData.activeIngredients.forEach(ing => baseSum += (ing.price * ing.qty));
+            let finalPrice = baseSum * sessions;
+            
+            const formattedPrice = finalPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            document.getElementById("sim-total-price").textContent = formattedPrice;
+            document.getElementById("sim-right-total").textContent = formattedPrice;
+        }
+
+        function filterSimulatorProtocols() {
+            const searchVal = document.getElementById("sim-search-input").value.toLowerCase();
+            const showModels = document.getElementById("sim-filter-models").checked;
+
+            const filtered = simData.protocols.filter(p => {
+                const matchesSearch = p.name.toLowerCase().includes(searchVal);
+                const matchesModels = showModels ? true : p.id !== 'hmb-performance'; 
+                return matchesSearch && matchesModels;
+            });
+
+            renderSimulatorProtocolsList(filtered);
+        }
+
+        function triggerSimSuccess() {
+            const toast = document.getElementById("sim-toast");
+            toast.querySelector('span').textContent = "✓ Orçamento salvo e consolidado gerado com sucesso!";
+            toast.classList.remove("translate-y-20", "opacity-0", "pointer-events-none");
+            toast.classList.add("translate-y-0", "opacity-100");
+            setTimeout(() => { 
+                toast.classList.add("translate-y-20", "opacity-0", "pointer-events-none"); 
+                toast.classList.remove("translate-y-0", "opacity-100"); 
+            }, 3000);
+        }
+
+        // Lógica de Abas do Prontuário IA (Seção 2)
+        function switchTab(tabName) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.add('hidden'));
+            
+            const buttons = document.querySelectorAll('[id^="tab-"]');
+            buttons.forEach(button => {
+                button.classList.remove('border-blue-500', 'text-white', 'bg-slate-900/60', 'font-semibold');
+                button.classList.add('border-transparent');
+            });
+
+            document.getElementById('content-' + tabName).classList.remove('hidden');
+            document.getElementById('tab-' + tabName).classList.add('border-blue-500', 'text-white', 'bg-slate-900/60', 'font-semibold');
+            document.getElementById('tab-' + tabName).classList.remove('border-transparent');
+        }
+
+        // ==================== LÓGICA DO SIMULADOR SUPPORT LAB ====================
+        const labSteps = ["Mapeando arquivo PDF...", "Processando biomarcadores...", "Detectando alterações...", "Gerando condutas automáticas..."];
+        function triggerLabAnalysis() {
+            document.getElementById("lab-state-upload").classList.add("hidden");
+            document.getElementById("lab-state-loading").classList.remove("hidden");
+            let step = 0;
+            const textElement = document.getElementById("lab-loading-text");
+            const interval = setInterval(() => { step++; if (step < labSteps.length) textElement.textContent = labSteps[step]; }, 500);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                document.getElementById("lab-state-loading").classList.add("hidden");
+                document.getElementById("lab-state-results").classList.remove("hidden");
+            }, 2200);
+        }
+
+        function resetLabSimulator() {
+            document.getElementById("lab-state-results").classList.add("hidden");
+            document.getElementById("lab-state-upload").classList.remove("hidden");
+        }
+
+        // ==================== LÓGICA DO PRONTUÁRIO ELETRÔNICO INTERATIVO ====================
+        function switchProntuarioView(viewName) {
+            const views = ['historico', 'receita', 'exames'];
+            views.forEach(view => {
+                // Esconder visualização correspondente
+                document.getElementById('p-view-' + view).classList.add('hidden');
+                
+                // Desativar estilo do botão do menu lateral
+                const menuBtn = document.getElementById('p-menu-' + view);
+                if (menuBtn) {
+                    menuBtn.className = "text-left px-4 py-3 text-xs font-semibold transition-all flex items-center gap-3 text-slate-600 hover:bg-slate-100 border-l-[3px] border-transparent rounded-lg lg:rounded-none shrink-0 min-h-[44px]";
+                }
+            });
+
+            // Ativar visualização atual
+            document.getElementById('p-view-' + viewName).classList.remove('hidden');
+            
+            // Ativar visual do menu lateral de forma idêntica à imagem
+            const activeMenuBtn = document.getElementById('p-menu-' + viewName);
+            if (activeMenuBtn) {
+                activeMenuBtn.className = "text-left px-4 py-3 text-xs font-bold transition-all flex items-center gap-3 bg-[#f1f5f9] text-slate-900 border-l-[3px] border-[#0252fd] rounded-lg lg:rounded-none shrink-0 min-h-[44px]";
+            }
+        }
+
+        // FÓRMULAS E PRESETS DO PRINT RECEITAS.PNG
+        const prescriptionFormulas = [
+            {
+                id: "emagrecimento-ansiedade",
+                name: "Emagrecimento Ansiedade e compulsao alimentar",
+                supportModel: true,
+                text: `--------- Emagrecimento Ansiedade e compulsao alimentar ---------
+
+Taurina ...................................................... 500 mg
+L Fenilalanina ............................................. 250 mg
+Piridoxal Fosfato ........................................... 20 mg
+Nicotinato de Inositol ................................... 100 mg
+5 Hidroxitriptofano ...................................... 200 mg
+Mucuna Pruriens .......................................... 100 mg
+Teanina ....................................................... 250 mg
+Veículo QSP .................................................. 4 cápsula(s)
+
+
+
+Mande: 30 dose(s)
+Uso oral: Tomar 2 cápsulas pela manhã e 2 cápsulas às 14 horas`,
+                activesCount: 7
+            },
+            {
+                id: "acao-antiespasmodica",
+                name: "Ação Antiespasmódica",
+                supportModel: false,
+                text: `--------- Ação Antiespasmódica ---------
+
+Escopolamina ............................................. 10 mg
+Dipirona Sódica .......................................... 250 mg
+Veículo QSP .................................................. 1 cápsula
+
+
+
+Mande: 20 dose(s)
+Uso oral: Tomar 1 cápsula de 8 em 8 horas em caso de dor ou cólica.`,
+                activesCount: 2
+            },
+            {
+                id: "antioxidante-snc",
+                name: "Ação Antioxidante e redução dos marcadores inflamatórios no sistema nervoso central",
+                supportModel: true,
+                text: `--------- Ação Antioxidante e redução dos marcadores inflamatórios no SNC ---------
+
+Ácido Alfa Lipóico ....................................... 150 mg
+Coenzima Q10 ............................................. 100 mg
+Acetil L-Carnitina ....................................... 300 mg
+Resveratrol .............................................. 50 mg
+Veículo QSP .................................................. 1 cápsula
+
+
+
+Mande: 30 dose(s)
+Uso oral: Tomar 1 cápsula ao dia pela manhã.`,
+                activesCount: 4
+            },
+            {
+                id: "antioxidante-menopausa",
+                name: "Ação Antioxidante na manutenção da saúde da mulher na menopausa",
+                supportModel: true,
+                text: `--------- Ação Antioxidante - Menopausa ---------
+
+Amora Miura .............................................. 250 mg
+Isoflavona de Soja ....................................... 60 mg
+Cimicifuga Racemosa ...................................... 40 mg
+Vitamina E ............................................... 100 UI
+Veículo QSP .................................................. 1 cápsula
+
+
+
+Mande: 60 dose(s)
+Uso oral: Tomar 1 cápsula duas vezes ao dia.`,
+                activesCount: 4
+            },
+            {
+                id: "diminuicao-tpm",
+                name: "Ação coadjuvante na diminuição da TPM",
+                supportModel: false,
+                text: `--------- Ação coadjuvante na diminuição da TPM ---------
+
+Óleo de Prímula .......................................... 500 mg
+Piridoxina (Vit B6) ...................................... 50 mg
+Magnésio Quelato ......................................... 150 mg
+Veículo QSP .................................................. 1 dose
+
+
+
+Mande: 30 dose(s)
+Uso oral: Tomar 1 dose à noite, iniciando 10 dias antes do ciclo menstrual.`,
+                activesCount: 3
+            },
+            {
+                id: "firmadora-remodeladora",
+                name: "Ação Firmadora e Remodeladora",
+                supportModel: true,
+                text: `--------- Ação Firmadora e Remodeladora ---------
+
+Silício Orgânico ......................................... 150 mg
+Colágeno Verisol ......................................... 2.5 g
+Vitamina C ............................................... 120 mg
+Biotina .................................................. 5 mg
+Veículo QSP .................................................. 1 sachê
+
+
+
+Mande: 30 sachês
+Uso oral: Diluir 1 sachê em 150ml de água e tomar à noite.`,
+                activesCount: 4
+            },
+            {
+                id: "controle-estresse",
+                name: "Ação no auxílio no controle do estresse",
+                supportModel: false,
+                text: `--------- Ação no auxílio no controle do estresse ---------
+
+Ashwagandha .............................................. 250 mg
+L-Teanina ................................................ 200 mg
+Passiflora Incarnata ..................................... 150 mg
+Relora ................................................... 100 mg
+Veículo QSP .................................................. 1 cápsula
+
+
+
+Mande: 30 dose(s)
+Uso oral: Tomar 1 cápsula no final da tarde ou quando necessário.`,
+                activesCount: 4
+            }
+        ];
+
+        // Renderiza a lista lateral de fórmulas
+        function renderFormulasList(filteredList) {
+            const container = document.getElementById("formulas-cards-list");
+            if (!container) return;
+            container.innerHTML = "";
+
+            const items = filteredList || prescriptionFormulas;
+
+            items.forEach(formula => {
+                const card = document.createElement("div");
+                card.className = "bg-white border border-slate-200 rounded-lg p-3 hover:bg-slate-50 transition-all cursor-pointer flex items-start space-x-2 shadow-sm active:scale-95";
+                card.onclick = () => injectFormulaToEditor(formula.id);
+
+                card.innerHTML = `
+                    <span class="text-blue-600 font-bold text-base leading-none shrink-0 mt-0.5">+</span>
+                    <div class="text-left leading-snug">
+                        <strong class="text-slate-800 text-[11px] font-bold block">${formula.name}</strong>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function injectFormulaToEditor(formulaId) {
+            const formula = prescriptionFormulas.find(f => f.id === formulaId);
+            if (!formula) return;
+
+            const editor = document.getElementById("recipe-text-editor");
+            if (editor) {
+                editor.innerHTML = formula.text;
+                editor.parentElement.classList.add("ring-2", "ring-blue-500");
+                setTimeout(() => {
+                    editor.parentElement.classList.remove("ring-2", "ring-blue-500");
+                }, 800);
+            }
+
+            const activesCounter = document.getElementById("selected-actives-count");
+            if (activesCounter) {
+                activesCounter.textContent = `${formula.activesCount} Ativo${formula.activesCount > 1 ? 's' : ''}`;
+            }
+
+            // Em telemóveis, alternamos automaticamente para o editor para ver o resultado
+            if (window.innerWidth < 1024) {
+                switchRecipeMobileTab('editor');
+                editor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function filterFormulasList() {
+            const searchVal = document.getElementById("formula-search-input").value.toLowerCase();
+            const showModels = document.getElementById("formula-filter-support").checked;
+
+            const filtered = prescriptionFormulas.filter(f => {
+                const matchesSearch = f.name.toLowerCase().includes(searchVal);
+                const matchesSupport = showModels ? f.supportModel : true;
+                return matchesSearch && matchesSupport;
+            });
+
+            renderFormulasList(filtered);
+        }
+
+        // ==================== LÓGICA DE SOLICITAÇÃO DE EXAMES ====================
+        const examCategories = [
+            {
+                id: "cardiologica",
+                name: "Avaliação Cardiológica / Atividade Elétrica",
+                isModel: false,
+                content: `Eletrocardiograma (ECG)
+Ecocardiograma Transtorácico
+Teste Ergométrico Computadorizado
+Holter 24 Horas
+MAPA de 24 horas`
+            },
+            {
+                id: "bioquimica",
+                name: "Bioquímica",
+                isModel: true,
+                content: `Glicemia de Jejum
+Ureia Sérica
+Creatinina Sérica
+Ácido Úrico Sérico
+Proteínas Totais e Frações
+AST (TGO) / ALT (TGP)
+Gama-GT`
+            },
+            {
+                id: "fezes",
+                name: "Fezes",
+                isModel: false,
+                content: `Exame Parasitológico de Fezes (EPF)
+Pesquisa de Sangue Oculto nas Fezes
+Coprocultura Sólida
+Rotavírus Fecal`
+            },
+            {
+                id: "hematologia",
+                name: "Hematologia",
+                isModel: true,
+                content: `Hemograma completo
+VHS
+Leucograma
+Eritrograma
+Plaquetas
+Hemoglobina (Hb)
+Hematócrito (Ht)
+Reticulócitos
+Prova do laço
+T. de sangramento (TS)
+T. de coagulação (TC)
+T. de protrombina (TP) + INR
+T. de tromboplastina (TTPa)
+T. de trombina (TT)
+Fibrinogênio
+Antitrombina III
+Agregação plaquetária
+T. de coag. ativado (TCA)
+Dímero D (DDI)
+Falcização`
+            },
+            {
+                id: "hormonologia",
+                name: "Hormonologia",
+                isModel: true,
+                content: `TSH Sênior
+T4 Livre
+Testosterona Total
+Testosterona Livre Calculada
+Estradiol Lipossolúvel
+Progesterona Total
+Cortisol Matinal`
+            },
+            {
+                id: "imunologia",
+                name: "Imunologia",
+                isModel: false,
+                content: `Sorologia HIV 1/2
+Sorologia para Sífilis (VDRL)
+PCR Ultrassensível
+Fator Reumatoide (FR)
+Anti-HBs / HBsAg`
+            }
+        ];
+
+        // Renderiza a lista de exames no painel lateral
+        function renderExamsCategoriesList(filteredList) {
+            const container = document.getElementById("exams-categories-list");
+            if (!container) return;
+            container.innerHTML = "";
+
+            const items = filteredList || examCategories;
+
+            items.forEach(category => {
+                const isActive = document.getElementById("exam-order-title").value === category.name;
+                const card = document.createElement("div");
+                
+                card.className = `p-3 rounded-xl border transition-all duration-150 cursor-pointer flex items-center space-x-2.5 shadow-sm active:scale-95 ${
+                    isActive 
+                    ? "bg-slate-50 border-blue-500 font-bold" 
+                    : "bg-white border-slate-200 hover:bg-slate-50"
+                }`;
+                card.onclick = () => selectExamCategory(category.id);
+
+                card.innerHTML = `
+                    <div class="w-6 h-6 bg-cyan-50 rounded-full flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-cloud text-[#00acc1] text-[10px]"></i>
+                    </div>
+                    <span class="text-[11px] font-semibold text-slate-700 truncate block text-left w-full font-sans">${category.name}</span>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Função de clique e injeção de exames
+        function selectExamCategory(categoryId) {
+            const category = examCategories.find(c => c.id === categoryId);
+            if (!category) return;
+
+            const titleInput = document.getElementById("exam-order-title");
+            if (titleInput) titleInput.value = category.name;
+
+            const editor = document.getElementById("exam-text-editor");
+            if (editor) {
+                editor.innerHTML = category.content;
+                editor.parentElement.classList.add("ring-2", "ring-[#0252fd]");
+                setTimeout(() => {
+                    editor.parentElement.classList.remove("ring-2", "ring-[#0252fd]");
+                }, 800);
+            }
+
+            // Em telemóveis, alterna automaticamente para ver o pedido montado
+            if (window.innerWidth < 1024) {
+                switchExamsMobileTab('editor');
+                editor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            renderExamsCategoriesList();
+        }
+
+        // Filtro em tempo real para a lista de exames
+        function filterExamsList() {
+            const searchVal = document.getElementById("exam-search-input").value.toLowerCase();
+            const filtered = examCategories.filter(c => {
+                return c.name.toLowerCase().includes(searchVal);
+            });
+            renderExamsCategoriesList(filtered);
+        }
+
+        function signRecipeDigital() {
+            const toast = document.getElementById("sim-toast");
+            toast.querySelector('span').textContent = "✓ Documento assinado digitalmente e salvo no histórico!";
+            toast.classList.remove("translate-y-20", "opacity-0", "pointer-events-none");
+            toast.classList.add("translate-y-0", "opacity-100");
+            setTimeout(() => { 
+                toast.classList.add("translate-y-20", "opacity-0", "pointer-events-none"); 
+                toast.classList.remove("translate-y-0", "opacity-100"); 
+            }, 3000);
+        }
+
+        // ==================== LÓGICA DO POP-UP LATERAL (30 SEGUNDOS) ====================
+        let popupDismissed = false;
+
+        function closeLateralPopup() {
+            const popup = document.getElementById("lateral-popup");
+            if (popup) {
+                popup.classList.remove("translate-y-0", "opacity-100", "pointer-events-auto");
+                popup.classList.add("translate-y-20", "opacity-0", "pointer-events-none");
+                popupDismissed = true;
+            }
+        }
+
+        function showLateralPopup() {
+            if (popupDismissed) return;
+            const popup = document.getElementById("lateral-popup");
+            if (popup) {
+                popup.classList.remove("translate-y-20", "opacity-0", "pointer-events-none");
+                popup.classList.add("translate-y-0", "opacity-100", "pointer-events-auto");
+            }
+        }
+
+        // ==================== RECONSTRUÇÃO COMPLETA DO MENU MOBILE DO SITE (SEM TRAVAR) ====================
+        const menuBtn = document.getElementById('menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+        function openMainMobileMenu() {
+            if(!mobileMenu) return;
+            mobileMenu.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Bloqueia scroll do fundo para evitar quebras
+            setTimeout(() => {
+                mobileMenu.classList.remove('opacity-0');
+                const innerDrawer = mobileMenu.querySelector('div');
+                if(innerDrawer) innerDrawer.classList.remove('translate-x-full');
+            }, 10);
+        }
+
+        function closeMainMobileMenu() {
+            if(!mobileMenu) return;
+            const innerDrawer = mobileMenu.querySelector('div');
+            if(innerDrawer) innerDrawer.classList.add('translate-x-full');
+            mobileMenu.classList.add('opacity-0');
+            document.body.style.overflow = ''; // Restaura scroll
+            setTimeout(() => {
+                mobileMenu.classList.add('hidden');
+            }, 300);
+        }
+
+        if(menuBtn) menuBtn.addEventListener('click', openMainMobileMenu);
+        if(closeMenuBtn) closeMenuBtn.addEventListener('click', closeMainMobileMenu);
+        
+        // Garante fechamento instantâneo ao clicar em qualquer item da navegação móvel
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', closeMainMobileMenu);
+        });
+
+        // ==================== LÓGICA DO TOOLTIP GLOBAL SEM CORTES (LOCKS NO PRONTUÁRIO) ====================
+        const customTooltip = document.getElementById('custom-blocked-tooltip');
+        const blockedItems = document.querySelectorAll('.blocked-menu-item');
+
+        blockedItems.forEach(item => {
+            // Evento de hover (computador)
+            item.addEventListener('mouseenter', (e) => {
+                showGlobalTooltip(e.currentTarget);
+            });
+            item.addEventListener('mouseleave', () => {
+                hideGlobalTooltip();
+            });
+            // Evento de clique (celular/tablet)
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                showGlobalTooltip(e.currentTarget);
+                // Fecha automaticamente após 2.5 segundos em telas de toque
+                setTimeout(hideGlobalTooltip, 2500);
+            });
+        });
+
+        function showGlobalTooltip(element) {
+            if (!customTooltip) return;
+            const rect = element.getBoundingClientRect();
+            
+            // Posiciona o balão centralizado exatamente em cima da funcionalidade
+            const tooltipHeight = customTooltip.offsetHeight || 32;
+            const tooltipWidth = customTooltip.offsetWidth || 180;
+            
+            const targetTop = window.scrollY + rect.top - tooltipHeight - 8;
+            const targetLeft = window.scrollX + rect.left + (rect.width / 2);
+
+            customTooltip.style.top = `${rect.top - tooltipHeight - 8}px`;
+            customTooltip.style.left = `${rect.left + (rect.width / 2) - (tooltipWidth / 2)}px`;
+            
+            customTooltip.classList.remove('hidden');
+            customTooltip.classList.add('animate-tooltip');
+        }
+
+        function hideGlobalTooltip() {
+            if (!customTooltip) return;
+            customTooltip.classList.add('hidden');
+            customTooltip.classList.remove('animate-tooltip');
+        }
+
+        const revealElements = document.querySelectorAll('.reveal');
+        window.addEventListener('scroll', () => {
+            revealElements.forEach(el => { if (el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add('active'); });
+        });
+
+        window.addEventListener("DOMContentLoaded", () => {
+            renderSimulatorProtocolsList();
+            renderSimulatorIngredients();
+            recalculateSimulatorPrice();
+            renderFormulasList();
+            renderExamsCategoriesList();
+            revealElements.forEach(el => el.classList.add('active'));
+
+            // Trata o estado inicial das abas inteligentes mobile
+            if(window.innerWidth < 1024) {
+                switchSimulatorMobileTab('editor');
+                switchRecipeMobileTab('editor');
+                switchExamsMobileTab('editor');
+            }
+
+            setTimeout(() => {
+                showLateralPopup();
+            }, 30000);
+        });
+    </script>
+</body>
+</html>
